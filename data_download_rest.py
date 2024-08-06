@@ -32,16 +32,16 @@ def download(data_url, dataset_dir, flatten=True):
     # os.remove(filename)
 
 if __name__ == '__main__':
-    # ribeiro 2020
-    data_folder_ribeiro_test = data_root/"ribeiro2020_test"
-    target_folder_ribeiro_test = target_root/("ribeiro_fs"+str(target_fs))
-    ribeiro_test_url='https://zenodo.org/record/3765780/files/data.zip?download=1'
+    # # ribeiro 2020
+    # data_folder_ribeiro_test = data_root/"ribeiro2020_test"
+    # target_folder_ribeiro_test = target_root/("ribeiro_fs"+str(target_fs))
+    # ribeiro_test_url='https://zenodo.org/record/3765780/files/data.zip?download=1'
 
-    # download and unzip dataset 
-    download(ribeiro_test_url, data_folder_ribeiro_test)
-    df_ribeiro_test, lbl_itos_ribeiro_test,  mean_ribeiro_test, std_ribeiro_test = prepare_data_ribeiro_test(data_folder_ribeiro_test, target_fs=target_fs, channels=12, channel_stoi=channel_stoi_default, target_folder=target_folder_ribeiro_test)
-    #reformat everything as memmap for efficiency
-    reformat_as_memmap(df_ribeiro_test, target_folder_ribeiro_test/("memmap.npy"),data_folder=target_folder_ribeiro_test,delete_npys=True)
+    # # download and unzip dataset 
+    # download(ribeiro_test_url, data_folder_ribeiro_test)
+    # df_ribeiro_test, lbl_itos_ribeiro_test,  mean_ribeiro_test, std_ribeiro_test = prepare_data_ribeiro_test(data_folder_ribeiro_test, target_fs=target_fs, channels=12, channel_stoi=channel_stoi_default, target_folder=target_folder_ribeiro_test)
+    # #reformat everything as memmap for efficiency
+    # reformat_as_memmap(df_ribeiro_test, target_folder_ribeiro_test/("memmap.npy"),data_folder=target_folder_ribeiro_test,delete_npys=True)
 
     # # zheng 2020
     # data_folder_chapman = data_root/"chapman/"
