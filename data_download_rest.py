@@ -59,25 +59,25 @@ if __name__ == '__main__':
     # df_chapman, lbl_itos_chapman,  mean_chapman, std_chapman = prepare_data_chapman(data_folder_chapman, denoised=False, target_fs=target_fs, channels=12, channel_stoi=channel_stoi_default, target_folder=target_folder_chapman)
     # reformat_as_memmap(df_chapman, target_folder_chapman/("memmap.npy"),data_folder=target_folder_chapman,delete_npys=True)
 
-    # cinc
-    data_folder_cinc = data_root/"cinc2020/"
-    if not isdir(data_folder_cinc):
-        os.makedirs(data_folder_cinc)
-    target_folder_cinc = target_root/("cinc_fs"+str(target_fs))
+    # # cinc
+    # data_folder_cinc = data_root/"cinc2020/"
+    # if not isdir(data_folder_cinc):
+    #     os.makedirs(data_folder_cinc)
+    # target_folder_cinc = target_root/("cinc_fs"+str(target_fs))
 
-    filenames = ['PhysioNetChallenge2020_Training_CPSC.tar.gz','PhysioNetChallenge2020_Training_2.tar.gz',
-             'PhysioNetChallenge2020_Training_StPetersburg.tar.gz', 'PhysioNetChallenge2020_Training_PTB.tar.gz',
-            'PhysioNetChallenge2020_Training_PTB-XL.tar.gz', 'PhysioNetChallenge2020_Training_E.tar.gz']
+    # filenames = ['PhysioNetChallenge2020_Training_CPSC.tar.gz','PhysioNetChallenge2020_Training_2.tar.gz',
+    #          'PhysioNetChallenge2020_Training_StPetersburg.tar.gz', 'PhysioNetChallenge2020_Training_PTB.tar.gz',
+    #         'PhysioNetChallenge2020_Training_PTB-XL.tar.gz', 'PhysioNetChallenge2020_Training_E.tar.gz']
     
-    for fname in filenames:
-        shutil.unpack_archive(fname, data_folder_cinc)
+    # for fname in filenames:
+    #     shutil.unpack_archive(fname, data_folder_cinc)
 
-    for fname in filenames:
-        os.remove(fname)
+    # for fname in filenames:
+    #     os.remove(fname)
 
-    df_cinc, lbl_itos_cinc,  mean_cinc, std_cinc = prepare_data_cinc(data_folder_cinc, target_fs=target_fs, channels=12, channel_stoi=channel_stoi_default, target_folder=target_folder_cinc)
-    #reformat everything as memmap for efficiency
-    reformat_as_memmap(df_cinc, target_folder_cinc/("memmap.npy"),data_folder=target_folder_cinc,delete_npys=True)
+    # df_cinc, lbl_itos_cinc,  mean_cinc, std_cinc = prepare_data_cinc(data_folder_cinc, target_fs=target_fs, channels=12, channel_stoi=channel_stoi_default, target_folder=target_folder_cinc)
+    # #reformat everything as memmap for efficiency
+    # reformat_as_memmap(df_cinc, target_folder_cinc/("memmap.npy"),data_folder=target_folder_cinc,delete_npys=True)
 
     # sph
     data_folder_sph = data_root/"sph/"
