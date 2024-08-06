@@ -43,21 +43,21 @@ if __name__ == '__main__':
     #reformat everything as memmap for efficiency
     reformat_as_memmap(df_ribeiro_test, target_folder_ribeiro_test/("memmap.npy"),data_folder=target_folder_ribeiro_test,delete_npys=True)
 
-    # zheng 2020
-    data_folder_chapman = data_root/"chapman/"
-    target_folder_chapman = target_root/("chapman_fs"+str(target_fs))
-    chapman_url = 'https://figshare.com/ndownloader/files/15651326'
-    # download and unzip dataset 
-    download(chapman_url, data_folder_chapman, flatten=False)
-    condition = 'https://figshare.com/ndownloader/files/15651293'
-    rhythm = 'https://figshare.com/ndownloader/files/15651296'
-    diagnostic = 'https://figshare.com/ndownloader/files/15653771'
-    attributes = 'https://figshare.com/ndownloader/files/15653762'
-    for url in [condition, rhythm, diagnostic, attributes]:
-        wget.download(url, out=str(data_folder_chapman))
+    # # zheng 2020
+    # data_folder_chapman = data_root/"chapman/"
+    # target_folder_chapman = target_root/("chapman_fs"+str(target_fs))
+    # chapman_url = 'https://figshare.com/ndownloader/files/15651326'
+    # # download and unzip dataset 
+    # download(chapman_url, data_folder_chapman, flatten=False)
+    # condition = 'https://figshare.com/ndownloader/files/15651293'
+    # rhythm = 'https://figshare.com/ndownloader/files/15651296'
+    # diagnostic = 'https://figshare.com/ndownloader/files/15653771'
+    # attributes = 'https://figshare.com/ndownloader/files/15653762'
+    # for url in [condition, rhythm, diagnostic, attributes]:
+    #     wget.download(url, out=str(data_folder_chapman))
 
-    df_chapman, lbl_itos_chapman,  mean_chapman, std_chapman = prepare_data_chapman(data_folder_chapman, denoised=False, target_fs=target_fs, channels=12, channel_stoi=channel_stoi_default, target_folder=target_folder_chapman)
-    reformat_as_memmap(df_chapman, target_folder_chapman/("memmap.npy"),data_folder=target_folder_chapman,delete_npys=True)
+    # df_chapman, lbl_itos_chapman,  mean_chapman, std_chapman = prepare_data_chapman(data_folder_chapman, denoised=False, target_fs=target_fs, channels=12, channel_stoi=channel_stoi_default, target_folder=target_folder_chapman)
+    # reformat_as_memmap(df_chapman, target_folder_chapman/("memmap.npy"),data_folder=target_folder_chapman,delete_npys=True)
 
     # cinc
     data_folder_cinc = data_root/"cinc2020/"
