@@ -36,7 +36,8 @@ if __name__ == '__main__':
   data_folder_ptb_xl = data_root/"ptb_xl/" # 数据存放文件夹
   target_folder_ptb_xl = target_root/("ptb_xl_fs"+str(target_fs))  # 
   ptb_xl_url='https://storage.googleapis.com/ptb-xl-1.0.1.physionet.org/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.1.zip'
-
+  # 直接替换链接就可以
+  ptb_xl_url='https://physionet.org/static/published-projects/ptb-xl/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.1.zip'
   # download and unzip dataset 
   download(ptb_xl_url, data_folder_ptb_xl)
   
