@@ -38,5 +38,9 @@ if __name__ == '__main__':
     # 直接替换链接就可以
     ptb_xl_url='https://physionet.org/static/published-projects/ptb-xl/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.1.zip'
     
-    download(ptb_xl_url, data_folder_ptb_xl)
+    # download(ptb_xl_url, data_folder_ptb_xl)
     
+    df_ptb_xl, lbl_itos_ptb_xl,  mean_ptb_xl, std_ptb_xl = prepare_data_ptb_xl(data_folder_ptb_xl, min_cnt=1, target_fs=target_fs, 
+                                                                           channels=12, channel_stoi=channel_stoi_default, 
+                                                                           target_folder=target_folder_ptb_xl, recreate_data=True)
+    reformat_as_memmap(df_ptb_xl, target_folder_ptb_xl/("memmap.npy"),data_folder=target_folder_ptb_xl,delete_npys=False)
