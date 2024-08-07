@@ -37,18 +37,18 @@ if __name__ == '__main__':
             # os.remove(filename)
 
 
-        # data_folder_ptb_xl = data_root/"ptb_xl/" # 数据存放文件夹
-        # target_folder_ptb_xl = target_root/("ptb_xl_fs"+str(target_fs))  # 
-        # # ptb_xl_url='https://storage.googleapis.com/ptb-xl-1.0.1.physionet.org/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.1.zip'
-        # # 直接替换链接就可以
-        # ptb_xl_url='https://physionet.org/static/published-projects/ptb-xl/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.1.zip'
+        data_folder_ptb_xl = data_root/"ptb_xl/" # 数据存放文件夹
+        target_folder_ptb_xl = target_root/("ptb_xl_fs"+str(target_fs))  # 
+        # ptb_xl_url='https://storage.googleapis.com/ptb-xl-1.0.1.physionet.org/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.1.zip'
+        # 直接替换链接就可以
+        ptb_xl_url='https://physionet.org/static/published-projects/ptb-xl/ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.1.zip'
         
-        # # download(ptb_xl_url, data_folder_ptb_xl)
+        # download(ptb_xl_url, data_folder_ptb_xl)
         
-        # df_ptb_xl, lbl_itos_ptb_xl,  mean_ptb_xl, std_ptb_xl = prepare_data_ptb_xl(data_folder_ptb_xl, min_cnt=1, target_fs=target_fs, 
-        #                                                                     channels=12, channel_stoi=channel_stoi_default, 
-        #                                                                     target_folder=target_folder_ptb_xl, recreate_data=True)
-        # reformat_as_memmap(df_ptb_xl, target_folder_ptb_xl/("memmap.npy"),data_folder=target_folder_ptb_xl,delete_npys=True)
+        df_ptb_xl, lbl_itos_ptb_xl,  mean_ptb_xl, std_ptb_xl = prepare_data_ptb_xl(data_folder_ptb_xl, min_cnt=1, target_fs=target_fs, 
+                                                                            channels=12, channel_stoi=channel_stoi_default, 
+                                                                            target_folder=target_folder_ptb_xl, recreate_data=True)
+        reformat_as_memmap(df_ptb_xl, target_folder_ptb_xl/("memmap.npy"),data_folder=target_folder_ptb_xl,delete_npys=True)
 
         # ribeiro 2020
         data_folder_ribeiro_test = data_root/"ribeiro2020_test"
@@ -56,7 +56,8 @@ if __name__ == '__main__':
         ribeiro_test_url='https://zenodo.org/record/3765780/files/data.zip?download=1'
 
         # download and unzip dataset 
-        # download(ribeiro_test_url, data_folder_ribeiro_test)
+        if target_fs == 100:
+            download(ribeiro_test_url, data_folder_ribeiro_test)
         # 这一步做降采样，所以这里需要都进行一次，上面的数据不能删除，这一步产生的npy可以删除
         df_ribeiro_test, lbl_itos_ribeiro_test,  mean_ribeiro_test, std_ribeiro_test = prepare_data_ribeiro_test(data_folder_ribeiro_test, target_fs=target_fs, channels=12, channel_stoi=channel_stoi_default, target_folder=target_folder_ribeiro_test)
         #reformat everything as memmap for efficiency
@@ -67,7 +68,8 @@ if __name__ == '__main__':
         target_folder_chapman = target_root/("chapman_fs"+str(target_fs))
         chapman_url = 'https://figshare.com/ndownloader/files/15651326'
         # download and unzip dataset 
-        # download(chapman_url, data_folder_chapman, flatten=False)
+        if target_fs == 100:
+            download(chapman_url, data_folder_chapman, flatten=False)
         condition = 'https://figshare.com/ndownloader/files/15651293'
         rhythm = 'https://figshare.com/ndownloader/files/15651296'
         diagnostic = 'https://figshare.com/ndownloader/files/15653771'
@@ -78,25 +80,25 @@ if __name__ == '__main__':
         df_chapman, lbl_itos_chapman,  mean_chapman, std_chapman = prepare_data_chapman(data_folder_chapman, denoised=False, target_fs=target_fs, channels=12, channel_stoi=channel_stoi_default, target_folder=target_folder_chapman)
         reformat_as_memmap(df_chapman, target_folder_chapman/("memmap.npy"),data_folder=target_folder_chapman,delete_npys=True)
 
-        # cinc
-        data_folder_cinc = data_root/"cinc2020/"
-        if not isdir(data_folder_cinc):
-            os.makedirs(data_folder_cinc)
-        target_folder_cinc = target_root/("cinc_fs"+str(target_fs))
+        # # cinc
+        # data_folder_cinc = data_root/"cinc2020/"
+        # if not isdir(data_folder_cinc):
+        #     os.makedirs(data_folder_cinc)
+        # target_folder_cinc = target_root/("cinc_fs"+str(target_fs))
 
-        filenames = ['PhysioNetChallenge2020_Training_CPSC.tar.gz','PhysioNetChallenge2020_Training_2.tar.gz',
-                'PhysioNetChallenge2020_Training_StPetersburg.tar.gz', 'PhysioNetChallenge2020_Training_PTB.tar.gz',
-                'PhysioNetChallenge2020_Training_PTB-XL.tar.gz', 'PhysioNetChallenge2020_Training_E.tar.gz']
+        # filenames = ['PhysioNetChallenge2020_Training_CPSC.tar.gz','PhysioNetChallenge2020_Training_2.tar.gz',
+        #         'PhysioNetChallenge2020_Training_StPetersburg.tar.gz', 'PhysioNetChallenge2020_Training_PTB.tar.gz',
+        #         'PhysioNetChallenge2020_Training_PTB-XL.tar.gz', 'PhysioNetChallenge2020_Training_E.tar.gz']
         
-        for fname in filenames:
-            shutil.unpack_archive(fname, data_folder_cinc)
+        # for fname in filenames:
+        #     shutil.unpack_archive(fname, data_folder_cinc)
 
-        for fname in filenames:
-            os.remove(fname)
+        # for fname in filenames:
+        #     os.remove(fname)
 
-        df_cinc, lbl_itos_cinc,  mean_cinc, std_cinc = prepare_data_cinc(data_folder_cinc, target_fs=target_fs, channels=12, channel_stoi=channel_stoi_default, target_folder=target_folder_cinc)
-        #reformat everything as memmap for efficiency
-        reformat_as_memmap(df_cinc, target_folder_cinc/("memmap.npy"),data_folder=target_folder_cinc,delete_npys=True)
+        # df_cinc, lbl_itos_cinc,  mean_cinc, std_cinc = prepare_data_cinc(data_folder_cinc, target_fs=target_fs, channels=12, channel_stoi=channel_stoi_default, target_folder=target_folder_cinc)
+        # #reformat everything as memmap for efficiency
+        # reformat_as_memmap(df_cinc, target_folder_cinc/("memmap.npy"),data_folder=target_folder_cinc,delete_npys=True)
 
         # sph
         data_folder_sph = data_root/"sph/"
@@ -104,7 +106,8 @@ if __name__ == '__main__':
         sph_url='https://springernature.figshare.com/ndownloader/files/32630684'
 
         # download and unzip dataset 
-        # download(sph_url, data_folder_sph)
+        if target_fs == 100:
+            download(sph_url, data_folder_sph)
 
         attributes = 'https://springernature.figshare.com/ndownloader/files/34793152'
         diagnostic = 'https://springernature.figshare.com/ndownloader/files/32630954'
