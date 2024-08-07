@@ -252,6 +252,7 @@ def cat(res, key):
 
 
 def evaluate_macro(preds, targets, trainer, idmap):
+    import pandas as pd
     # for val sanity check TODO find cleaner solution
     idmap = idmap[: preds.shape[0]]
     lbl_itos = trainer.datamodule.lbl_itos
