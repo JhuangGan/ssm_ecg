@@ -159,12 +159,19 @@ class ECGLightningModel(pl.LightningModule):
         macro, macro_agg, scores_agg = evaluate_macro(
             preds, targets, self.trainer, self.trainer.datamodule.idmap)
 
+        dic = {'preds_agg': preds_agg, 'targs_agg':targs_agg}
+        torch.save(dic, './val_preds_targs_agg.pth') 
+
         if self.sigmoid_eval:
             preds = torch.sigmoid(Tensor(preds)).numpy()
         sigmacro, sigmacro_agg, sigscores_agg = evaluate_macro(
             preds, targets, self.trainer, self.trainer.datamodule.idmap)
+        
+        dic = {'preds_agg': preds_agg, 'targs_agg':targs_agg}
+        torch.save(dic, './val_preds_targs_agg_sig.pth') 
+        
         val_loss = mean(outputs, "val_loss")
-
+        
         log = {
             "val/total_loss": val_loss,
             "val/val_macro": macro,
@@ -196,6 +203,10 @@ class ECGLightningModel(pl.LightningModule):
         targets = cat(outputs, "targets")
         macro, macro_agg, scores_agg = evaluate_macro(
             preds, targets, self.trainer, self.trainer.datamodule.test_idmap)
+        
+        dic = {'preds_agg': preds_agg, 'targs_agg':targs_agg}
+        torch.save(dic, './test_preds_targs_agg.pth') 
+        
         if self.sigmoid_eval:
             preds = torch.sigmoid(Tensor(preds)).numpy()
         if self.save_preds:
@@ -203,6 +214,10 @@ class ECGLightningModel(pl.LightningModule):
             self.targets = targets
         sigmacro, sigmacro_agg, sigscores_agg = evaluate_macro(
             preds, targets, self.trainer, self.trainer.datamodule.test_idmap)
+
+        dic = {'preds_agg': preds_agg, 'targs_agg':targs_agg}
+        torch.save(dic, './test_preds_targs_agg_sig.pth') 
+        
         test_loss = mean(outputs, "test_loss")
         log = {
             "test/total_loss": test_loss,
@@ -257,9 +272,6 @@ def evaluate_macro(preds, targets, trainer, idmap):
     lbl_itos = trainer.datamodule.lbl_itos
     scores = eval_scores(targets, preds, classes=lbl_itos, parallel=True)
     preds_agg, targs_agg = aggregate_predictions(preds, targets, idmap)
-    
-    dic = {'preds_agg': preds_agg, 'targs-agg':targs_agg}
-    torch.save(dic, './preds_targs_agg.pth') 
     
     scores_agg = eval_scores(targs_agg, preds_agg,
                              classes=lbl_itos, parallel=True)
