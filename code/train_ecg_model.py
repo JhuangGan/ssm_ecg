@@ -259,7 +259,7 @@ def evaluate_macro(preds, targets, trainer, idmap):
     scores = eval_scores(targets, preds, classes=lbl_itos, parallel=True)
     preds_agg, targs_agg = aggregate_predictions(preds, targets, idmap)
     
-    df_pred_targs = pd.DataFrame(preds_agg, targs_agg, columns=['preds_agg', 'targs_agg'])
+    df_pred_targs = pd.DataFrame({'preds_agg':preds_agg, 'targs_agg':targs_agg})
     df_pred_targs.to_csv('./df_pred_targs.csv')
     scores_agg = eval_scores(targs_agg, preds_agg,
                              classes=lbl_itos, parallel=True)
