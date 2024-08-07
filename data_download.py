@@ -30,7 +30,7 @@ if __name__ == '__main__':
     if not isdir(data_root):
         os.makedirs(data_root)
     if not isdir(target_root):
-    os.makedirs(target_root)
+        os.makedirs(target_root)
     
     data_folder_ptb_xl = data_root/"ptb_xl/" # 数据存放文件夹
     target_folder_ptb_xl = target_root/("ptb_xl_fs"+str(target_fs))  # 
