@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     best_f1_score, thresholds = bestf1score(targs, preds)
 
-    macro_auc = np.round(roc_auc_score(dic['targs_agg'], dic['preds_agg'], average='macro'), 3)
-    macro_aupr = np.round(average_precision_score(dic['targs_agg'], dic['preds_agg'], average='macro'), 3)
+    macro_auc = np.round(roc_auc_score(targs, preds, average='macro'), 3)
+    macro_aupr = np.round(average_precision_score(targs, preds, average='macro'), 3)
     print(f'info:{args.info},f1:{best_f1_score},auc:{macro_auc}, aupr:{macro_aupr}')
 
