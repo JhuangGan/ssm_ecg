@@ -157,18 +157,12 @@ class ECGLightningModel(pl.LightningModule):
         preds = cat(outputs, "preds")
         targets = cat(outputs, "targets")
         macro, macro_agg, scores_agg = evaluate_macro(
-            preds, targets, self.trainer, self.trainer.datamodule.idmap)
-
-        dic = {'preds_agg': preds_agg, 'targs_agg':targs_agg}
-        torch.save(dic, './val_preds_targs_agg.pth') 
+            preds, targets, self.trainer, self.trainer.datamodule.idmap, info='val_')
 
         if self.sigmoid_eval:
             preds = torch.sigmoid(Tensor(preds)).numpy()
         sigmacro, sigmacro_agg, sigscores_agg = evaluate_macro(
-            preds, targets, self.trainer, self.trainer.datamodule.idmap)
-        
-        dic = {'preds_agg': preds_agg, 'targs_agg':targs_agg}
-        torch.save(dic, './val_preds_targs_agg_sig.pth') 
+            preds, targets, self.trainer, self.trainer.datamodule.idmap, info='val_sig_')
         
         val_loss = mean(outputs, "val_loss")
         
@@ -202,10 +196,7 @@ class ECGLightningModel(pl.LightningModule):
         preds = cat(outputs, "preds")
         targets = cat(outputs, "targets")
         macro, macro_agg, scores_agg = evaluate_macro(
-            preds, targets, self.trainer, self.trainer.datamodule.test_idmap)
-        
-        dic = {'preds_agg': preds_agg, 'targs_agg':targs_agg}
-        torch.save(dic, './test_preds_targs_agg.pth') 
+            preds, targets, self.trainer, self.trainer.datamodule.test_idmap, info='test_')
         
         if self.sigmoid_eval:
             preds = torch.sigmoid(Tensor(preds)).numpy()
@@ -213,10 +204,7 @@ class ECGLightningModel(pl.LightningModule):
             self.preds = preds
             self.targets = targets
         sigmacro, sigmacro_agg, sigscores_agg = evaluate_macro(
-            preds, targets, self.trainer, self.trainer.datamodule.test_idmap)
-
-        dic = {'preds_agg': preds_agg, 'targs_agg':targs_agg}
-        torch.save(dic, './test_preds_targs_agg_sig.pth') 
+            preds, targets, self.trainer, self.trainer.datamodule.test_idmap, info='test_info')
         
         test_loss = mean(outputs, "test_loss")
         log = {
@@ -266,12 +254,15 @@ def cat(res, key):
     ).numpy()
 
 
-def evaluate_macro(preds, targets, trainer, idmap):
+def evaluate_macro(preds, targets, trainer, idmap, info=''):
     # for val sanity check TODO find cleaner solution
     idmap = idmap[: preds.shape[0]]
     lbl_itos = trainer.datamodule.lbl_itos
     scores = eval_scores(targets, preds, classes=lbl_itos, parallel=True)
     preds_agg, targs_agg = aggregate_predictions(preds, targets, idmap)
+
+    dic = {'preds_agg': preds_agg, 'targs_agg':targs_agg}
+    torch.save(dic, './'+info+'preds_targs_agg.pth') 
     
     scores_agg = eval_scores(targs_agg, preds_agg,
                              classes=lbl_itos, parallel=True)
