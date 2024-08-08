@@ -2,7 +2,7 @@ import torch
 import numpy as np
 from sklearn.metrics import roc_auc_score, average_precision_score, f1_score
 def print_info(info=''):
-  dic = torch.load('./'+str(info)+'_preds_targs_agg_'+'.pth')
+  dic = torch.load('./'+str(info)+'_preds_targs_agg'+'.pth')
   
   macro_auc = np.round(roc_auc_score(dic['targs-agg'], dic['preds_agg'], average='macro'), 3)
   macro_aupr = np.round(average_precision_score(dic['targs-agg'], dic['preds_agg'], average='macro'), 3)
