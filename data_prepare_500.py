@@ -11,7 +11,7 @@ from os.path import isdir
 
 if __name__ == '__main__':
     target_fs=500
-    data_root=Path("/data/")
+    data_root=Path("./data/")
     target_root=Path("./data")
 
     if not isdir(data_root):
