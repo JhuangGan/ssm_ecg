@@ -120,4 +120,4 @@ if __name__ == '__main__':
         reformat_as_memmap(df_sph, target_folder_sph/("memmap.npy"),data_folder=target_folder_sph,delete_npys=True)
     
     download_all_data_fs(target_fs=100)
-    download_all_data_fs(target_fs=500)
+    # download_all_data_fs(target_fs=500)
