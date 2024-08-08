@@ -1,15 +1,23 @@
 import sys 
 sys.path.append("./code")
+sys.path.append("D:/Works/FW/WorkNoteLog/2407/paper10/gitclone_repo/ssm_ecg/code")
 from clinical_ts.timeseries_utils import *
 from clinical_ts.ecg_utils import *
 from pathlib import Path
 import os
 from os.path import isdir
 
+
+
+
 if __name__ == '__main__':
     target_fs=500
-    data_root=Path("./data/")
+    data_root=Path("/data/")
     target_root=Path("./data")
+
+    data_root=Path("D:/Works/FW/WorkNoteLog/2407/paper10/gitclone_repo/ssm_ecg//data/")
+    target_root=Path("D:/Works/FW/WorkNoteLog/2407/paper10/gitclone_repo/ssm_ecg//data")
+
     if not isdir(data_root):
         os.makedirs(data_root)
     if not isdir(target_root):
