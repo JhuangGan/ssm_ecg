@@ -6,9 +6,9 @@ def print_info(valortest='val', sig=''):
   
   macro_auc = np.round(roc_auc_score(dic['targs-agg'], dic['preds_agg'], average='macro'), 3)
   macro_aupr = np.round(average_precision_score(dic['targs-agg'], dic['preds_agg'], average='macro'), 3)
-  macro_f1 = np.round(f1_score(dic['targs-agg'], dic['preds_agg'], average='macro'), 3)
+  # macro_f1 = np.round(f1_score(dic['targs-agg'], dic['preds_agg'], average='macro'), 3)
   
-  print(f'{valortest} {sig},auc{}:{macro_auc}, aupr:{macro_aupr}')
+  print(f'{valortest} {sig},auc:{macro_auc}, aupr:{macro_aupr}')
 
 print_info(valortest='val', sig='')
 print_info(valortest='val', sig='sig')
