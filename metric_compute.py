@@ -15,7 +15,7 @@ def bestf1score(label, predict):
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser()
+    parser = ArgumentParser(add_help=False)
     parser.add_argument("--preds_targs_path", type=str, default='')
     parser.add_argument("--info", type=str, default='')
 
