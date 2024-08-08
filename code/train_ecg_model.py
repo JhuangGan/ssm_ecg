@@ -204,7 +204,7 @@ class ECGLightningModel(pl.LightningModule):
             self.preds = preds
             self.targets = targets
         sigmacro, sigmacro_agg, sigscores_agg = evaluate_macro(
-            preds, targets, self.trainer, self.trainer.datamodule.test_idmap, info='test_info')
+            preds, targets, self.trainer, self.trainer.datamodule.test_idmap, info='test_sig')
         
         test_loss = mean(outputs, "test_loss")
         log = {
