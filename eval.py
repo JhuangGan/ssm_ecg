@@ -13,4 +13,4 @@ def print_info(info=''):
 print_info(info='val_')
 print_info(info='val_sig_')
 print_info(info='test_info')
-print_info(info='test')
+print_info(info='test_')
