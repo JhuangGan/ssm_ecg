@@ -7,7 +7,7 @@ from sklearn.metrics import roc_auc_score, average_precision_score
 
 
 def bestf1score(label, predict):
-    precisions, recalls, thresholds = precision_recall_curve(label, predict)
+    precisions, recalls, thresholds = precision_recall_curve(label, predict,)
     f1_scores = (2 * precisions * recalls) / (precisions + recalls + 1e-9)
     best_f1_score = np.max(f1_scores[np.isfinite(f1_scores)])
     best_f1_score_index = np.argmax(f1_scores[np.isfinite(f1_scores)])
