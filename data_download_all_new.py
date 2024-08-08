@@ -1,6 +1,5 @@
 import sys 
-sys.path.append("D:/Works/FW/WorkNoteLog/2407/paper10/ssm_ecg-main/ssm_ecg-main/code")
-sys.path.append("D:/Works/FW/WorkNoteLog/2407/paper10/")
+sys.path.append("./code")
 from clinical_ts.timeseries_utils import *
 from clinical_ts.ecg_utils import *
 from pathlib import Path
@@ -16,8 +15,8 @@ if __name__ == '__main__':
 
     def download_all_data_fs(target_fs=100):
         target_fs=target_fs
-        data_root=Path("D:/Works/FW/WorkNoteLog/2407/paper10/ssm_ecg-main/ssm_ecg-main//data/")
-        target_root=Path("D:/Works/FW/WorkNoteLog/2407/paper10/ssm_ecg-main/ssm_ecg-main//data")
+        data_root=Path("./data/")
+        target_root=Path("./data")
         if not isdir(data_root):
             os.makedirs(data_root)
         if not isdir(target_root):
