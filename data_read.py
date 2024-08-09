@@ -26,8 +26,8 @@ if __name__ == '__main__':
 
     df_ptb_xl, lbl_itos_ptb_xl, mean_ptb_xl, std_ptb_xl = load_dataset(target_root_ptb_xl,df_mapped=False)
 
-    # print(df_ptb_xl)
-    print(lbl_itos_ptb_xl)
+    print(df_ptb_xl['label_diag_superclass'][10:20])
+    # print(lbl_itos_ptb_xl)
     # print(mean_ptb_xl)
     # print(std_ptb_xl)
 
@@ -37,16 +37,16 @@ if __name__ == '__main__':
     # memap_meta.npy文件这个文件怎么来的呢？
 
     # memap_meta.npz文件读取，看看npz到底是什么样子
-    import numpy as np
-    # import os
-    # current_path = os.getcwd()
-    # print(current_path)
-    memmap_meta_npz = np.load('./data/ptb_xl_fs100/memmap_meta.npz')
-    for i, memmap in enumerate(memmap_meta_npz):
-        print(f'{i},{memmap}')
-        if i<4:
-            print(memmap_meta_npz[str(memmap)])
-    # print(memmap_meta_npz['file_idx'])
+    # import numpy as np
+    # # import os
+    # # current_path = os.getcwd()
+    # # print(current_path)
+    # memmap_meta_npz = np.load('./data/ptb_xl_fs100/memmap_meta.npz')
+    # for i, memmap in enumerate(memmap_meta_npz):
+    #     print(f'{i},{memmap}')
+    #     if i<4:
+    #         print(memmap_meta_npz[str(memmap)])
+    # # print(memmap_meta_npz['file_idx'])
     
 
 

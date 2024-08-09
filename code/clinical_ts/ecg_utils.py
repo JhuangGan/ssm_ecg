@@ -44,7 +44,7 @@ def get_available_channels(channel_labels, channel_stoi):
 def resample_data(sigbufs, channel_labels, fs, target_fs, channels=12, channel_stoi=None):#,skimage_transform=True,interpolation_order=3):
     channel_labels = [c.lower() for c in channel_labels]
     #https://github.com/scipy/scipy/issues/7324 zoom issues
-    factor = target_fs/fs
+    factor = target_fs/fs  # fs是500hz
     timesteps_new = int(len(sigbufs)*factor)
     if(channel_stoi is not None):
         data = np.zeros((timesteps_new, channels), dtype=np.float32)

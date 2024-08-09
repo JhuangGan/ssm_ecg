@@ -162,7 +162,7 @@ if __name__ == '__main__':
                                                                            target_folder=target_folder_ptb_xl, recreate_data=True)
     
     # 把df_ptb_xl保存为df.pkl,lbl_itos_ptb_xl(key为label，包含未筛选min_cnt和筛选的，value为对应去重的值的list)保存为lbl_itos.pkl
-    # 将mean_ptb_xl,std_ptb_xl保存为mean.npy,std.npy
+    # 将mean_ptb_xl,std_ptb_xl保存为mean.npy, std.npy
     # 且已经将对应的文件保存为npy文件了
 
     # 将npy文件，读取并通过memmap，然后生成memmap.npy文件以及对应的memmap_meta.npz
