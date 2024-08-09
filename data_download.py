@@ -10,6 +10,9 @@ import wget
 import shutil
 import pdb
 
+data_root=Path("./data/")
+target_root=Path("./data")
+
 def download(data_url, dataset_dir, flatten=True):
     filename = wget.download(data_url, out=str(data_root))
     shutil.unpack_archive(str(filename), dataset_dir)
