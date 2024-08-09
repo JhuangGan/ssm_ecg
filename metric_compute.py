@@ -13,6 +13,21 @@ def bestf1score(label, predict):
     best_f1_score_index = np.argmax(f1_scores[np.isfinite(f1_scores)])
     return best_f1_score, thresholds[best_f1_score_index]
 
+def multilabel_f1score(label, predict):
+    label = [[label[i][j] for i in range(len(label))] for j in range(len(label[0]))]
+    predict = [[predict[i][j] for i in range(len(predict))] for j in range(len(predict[0]))]
+    
+    best_f1_score_list = []
+    threshold_list = []
+    for i in range(len(label)):
+        best_f1_score, threshold = bestf1score(label[i], predict[i])
+        best_f1_score_list.append(best_f1_score)
+        threshold_list.append(threshold)
+    
+    macro_best_f1_score = best_f1_score.mean()
+
+    return macro_best_f1_score, threshold_list
+
 
 if __name__ == '__main__':
     parser = ArgumentParser(add_help=False)
@@ -25,9 +40,9 @@ if __name__ == '__main__':
     preds = dic['preds']
     targs = dic['targs']
 
-    best_f1_score, thresholds = bestf1score(targs, preds)
+    macro_best_f1_score, thresholds_list = multilabel_f1score(targs, preds)
 
     macro_auc = np.round(roc_auc_score(targs, preds, average='macro'), 3)
     macro_aupr = np.round(average_precision_score(targs, preds, average='macro'), 3)
-    print(f'info:{args.info},f1:{best_f1_score},auc:{macro_auc}, aupr:{macro_aupr}')
+    print(f'info:{args.info},f1:{macro_best_f1_score},auc:{macro_auc}, aupr:{macro_aupr}')
 
