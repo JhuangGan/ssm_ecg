@@ -15,7 +15,7 @@ data_folder_ptb_xl=Path("./data/ningbo")
 
 def download(data_url, dataset_dir):
     filename = wget.download(data_url, out=str(data_root))
-    shutil.unpack_archive(str(filename), dataset_dir)
+    # shutil.unpack_archive(str(filename), dataset_dir)
     # os.remove(filename)
 
 ptb_xl_url = 'https://physionet.org/files/challenge-2021/1.0.3/'
