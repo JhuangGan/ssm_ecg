@@ -73,4 +73,5 @@ if __name__ == '__main__':
     # print('test value counts:')
     # val_count(df_test)
 
+    # 在mutual文件夹下，创建对应所需df与memmap文件
     reformat_as_memmap(df_ptb_xl, target_folder_ptb_xl/("memmap.npy"),data_folder=target_folder_ptb_xl,delete_npys=False)
