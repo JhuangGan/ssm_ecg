@@ -500,8 +500,8 @@ def cli_main():
         loss_fn=nn.CrossEntropyLoss(
         ) if args.binary_classification else F.binary_cross_entropy_with_logits,
         use_meta_information_in_head=args.use_meta_information_in_head,
-        dataset_name=args.target_folder,
-        input_size_name=args.input_size,
+        dataset_name=str(args.target_folder),
+        input_size_name=str(args.input_size)
     )
     # configure trainer
     tb_logger = TensorBoardLogger(
