@@ -449,7 +449,9 @@ if __name__ == '__main__':
         callbacks = callbacks,
         benchmark=True,
     
-        gpus=hparams.gpus,
+        # gpus=hparams.gpus
+        accelerator='gpu'
+        devices='auto'
         num_nodes=hparams.num_nodes,
         precision=hparams.precision,
         #distributed_backend=hparams.distributed_backend,
