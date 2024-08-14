@@ -49,6 +49,9 @@ class ECGLightningModel(pl.LightningModule):
         sigmoid_eval=True,
         save_preds=False,
         use_meta_information_in_head=False,
+        # 增加一下dataset name & input size，以有对应的文件名以保存对应的预测结果
+        dataset_name=None,
+        input_size_name=None,
         **kwargs
     ):
         """
@@ -74,6 +77,10 @@ class ECGLightningModel(pl.LightningModule):
         self.use_meta_information_in_head = use_meta_information_in_head
         if use_meta_information_in_head:
             logger.info("Use meta information in Lightning Model")
+
+        # 增加
+        self.dataset_name=dataset_name
+        self.input_size_name=input_size_name
 
     
     def configure_optimizers(self):
@@ -157,15 +164,15 @@ class ECGLightningModel(pl.LightningModule):
         preds = cat(outputs, "preds")
         targets = cat(outputs, "targets")
 
-        dic_predtargs_save(preds, targets, info='val_')
+        dic_predtargs_save(preds, targets, info='val_'+self.dataset_name+'_'+self.input_size_name)
 
         macro, macro_agg, scores_agg = evaluate_macro(
-            preds, targets, self.trainer, self.trainer.datamodule.idmap, info='val_agg_')
+            preds, targets, self.trainer, self.trainer.datamodule.idmap, info='val_agg_'+self.dataset_name+'_'+self.input_size_name)
 
         if self.sigmoid_eval:
             preds = torch.sigmoid(Tensor(preds)).numpy()
         sigmacro, sigmacro_agg, sigscores_agg = evaluate_macro(
-            preds, targets, self.trainer, self.trainer.datamodule.idmap, info='val_sig_agg_')
+            preds, targets, self.trainer, self.trainer.datamodule.idmap, info='val_sig_agg_'+self.dataset_name+'_'+self.input_size_name)
         
         val_loss = mean(outputs, "val_loss")
         
@@ -199,10 +206,10 @@ class ECGLightningModel(pl.LightningModule):
         preds = cat(outputs, "preds")
         targets = cat(outputs, "targets")
 
-        dic_predtargs_save(preds, targets, info='test_')
+        dic_predtargs_save(preds, targets, info='test_'+self.dataset_name+'_'+self.input_size_name)
 
         macro, macro_agg, scores_agg = evaluate_macro(
-            preds, targets, self.trainer, self.trainer.datamodule.test_idmap, info='test_agg_')
+            preds, targets, self.trainer, self.trainer.datamodule.test_idmap, info='test_agg_'+self.dataset_name+'_'+self.input_size_name)
         
         if self.sigmoid_eval:
             preds = torch.sigmoid(Tensor(preds)).numpy()
@@ -210,7 +217,7 @@ class ECGLightningModel(pl.LightningModule):
             self.preds = preds
             self.targets = targets
         sigmacro, sigmacro_agg, sigscores_agg = evaluate_macro(
-            preds, targets, self.trainer, self.trainer.datamodule.test_idmap, info='test_sig_agg_')
+            preds, targets, self.trainer, self.trainer.datamodule.test_idmap, info='test_sig_agg_'+self.dataset_name+'_'+self.input_size_name)
         
         test_loss = mean(outputs, "test_loss")
         log = {
@@ -262,7 +269,7 @@ def cat(res, key):
 
 def dic_predtargs_save(preds, targs, info):
     dic = {'preds': preds, 'targs':targs}
-    torch.save(dic, './'+info+'preds_targs.pth') 
+    torch.save(dic, './'+info+'preds_targs.pth')
 
 
 def evaluate_macro(preds, targets, trainer, idmap, info=''):
@@ -492,7 +499,9 @@ def cli_main():
         rate=args.rate,
         loss_fn=nn.CrossEntropyLoss(
         ) if args.binary_classification else F.binary_cross_entropy_with_logits,
-        use_meta_information_in_head=args.use_meta_information_in_head
+        use_meta_information_in_head=args.use_meta_information_in_head,
+        dataset_name=args.dataset,
+        input_size_name=args.input_size,
     )
     # configure trainer
     tb_logger = TensorBoardLogger(
