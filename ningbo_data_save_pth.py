@@ -11,13 +11,13 @@ global SUFFIX
 global FILE_dx_all
 
 
-CUR_DIR = './data'
+CUR_DIR = os.path.join(os.getcwd(), 'data')
 PTH_FOLDERNAMES= 'Ningbo_pth'
 PTH_LABEL_FOLDERNAMES = "Ningbo_pth_labels"
 
 SUFFIX = '.pth'
 
-FILE_dx_all = "dx_all_"+SUFFIX
+FILE_dx_all = "dx_all"+SUFFIX
 
 if not os.path.exists(os.path.join(CUR_DIR, PTH_LABEL_FOLDERNAMES)):
     os.mkdir(os.path.join(CUR_DIR, PTH_LABEL_FOLDERNAMES))
