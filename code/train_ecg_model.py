@@ -502,6 +502,7 @@ def cli_main():
         logger=tb_logger,
         max_epochs=args.epochs,
         gpus=1 if args.gpu else 0,
+        accelerator='gpu',
         devices=3,
         callbacks=[ModelCheckpoint(monitor='val/val_macro_agg', mode='max')],
         # resume_from_checkpoint=None if args.checkpoint_path == "" else args.checkpoint_path
