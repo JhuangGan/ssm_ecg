@@ -7,11 +7,16 @@ from clinical_ts.ecg_utils import *
 from pathlib import Path
 import os
 from os.path import isdir
-
+from argparse import ArgumentParser
 
 if __name__ == '__main__':
+    parser = ArgumentParser(add_help=False)
+    parser.add_argument("--fs", type=str, default='')
 
-    target_fs=100
+    args = parser.parse_args()
+
+    target_fs=args.fs
+    
     data_root=Path("./data/")
     target_root=Path("./data")
 
