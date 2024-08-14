@@ -513,7 +513,7 @@ def cli_main():
     trainer = Trainer(
         logger=tb_logger,
         max_epochs=args.epochs,
-        gpus=1 if args.gpu else 0,
+        # gpus=1 if args.gpu else 0,
         accelerator='gpu',
         devices=3,
         callbacks=[ModelCheckpoint(monitor='val/val_macro_agg', mode='max')],
