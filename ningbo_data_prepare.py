@@ -45,7 +45,7 @@ def prepare_data_ningbo(data_path, min_cnt=10, target_fs=100, channels=12, targe
             df_ningbo['age'].append(file['age'])
             df_ningbo['sex'].append(file['sex'])
             df_ningbo['pid'].append(file['pid'])
-            df_ningbo['label'].append(file['label'])
+            df_ningbo['label'].append(str(file['label']))  ## tensor，转为str
 
             df_ningbo['dataset'].append('ningbo')
             df_ningbo['data'].append(filename+".npy")
