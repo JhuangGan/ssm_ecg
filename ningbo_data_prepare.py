@@ -18,6 +18,8 @@ import numpy as np
 import torch 
 import resampy
 
+from argparse import ArgumentParser
+
 def prepare_data_ningbo(data_path, min_cnt=10, target_fs=100, channels=12, target_folder=None, recreate_data=True):
     # data_path = Path(data_path)
     target_root_ningbo = Path(".") if target_folder is None else target_folder
@@ -63,7 +65,7 @@ def prepare_data_ningbo(data_path, min_cnt=10, target_fs=100, channels=12, targe
 
         df_ningbo =pd.DataFrame(df_ningbo)
 
-        df_ningbo, lbl_itos =map_and_filter_labels(df_ningbo,min_cnt=1,lbl_cols=["label"])
+        df_ningbo, lbl_itos_ningbo =map_and_filter_labels(df_ningbo,min_cnt=1,lbl_cols=["label"])
 
         # 要保存的位置
         # target_root_ningbo = 'D:/Works/FW/WorkNoteLog/2407/paper10/gitclone_repo/ssm_ecg/Ningbo_PTBXL_CS_Ga_CPSC_pth/'
@@ -74,20 +76,24 @@ def prepare_data_ningbo(data_path, min_cnt=10, target_fs=100, channels=12, targe
         dataset_add_length_col(df_ningbo,data_folder=target_root_ningbo)
 
         #save means and stds
-        mean_sph, std_sph = dataset_get_stats(df_ningbo)
+        mean_ningbo, std_ningbo = dataset_get_stats(df_ningbo)
 
         #save 保存为df.pkl, lbl_itos.pkl, mean.npy, std.npy
-        save_dataset(df_ningbo,lbl_itos,mean_sph,std_sph,target_root_ningbo)
+        save_dataset(df_ningbo,lbl_itos_ningbo,mean_ningbo,std_ningbo,target_root_ningbo)
 
     else:
-        df_ptb_xl, lbl_itos_ptb_xl, mean_ptb_xl, std_ptb_xl = load_dataset(target_root_ningbo,df_mapped=False)
-    return df_ptb_xl, lbl_itos_ptb_xl, mean_ptb_xl, std_ptb_xl
+        df_ningbo, lbl_itos_ningbo, mean_ningbo, std_ningbo = load_dataset(target_root_ningbo,df_mapped=False)
+    return df_ningbo, lbl_itos_ningbo, mean_ningbo, std_ningbo
 
 
 
 
 if __name__ == '__main__':
-    
+    parser = ArgumentParser(add_help=False)
+    parser.add_argument("--fs", type=int, default='')
+
+    args = parser.parse_args()
+
     def ningbo_data(target_fs=500):
         target_fs=target_fs 
 
@@ -115,6 +121,6 @@ if __name__ == '__main__':
         
         reformat_as_memmap(df_ptb_ningbo, target_folder_ningbo/("memmap.npy"),data_folder=target_folder_ningbo,delete_npys=False)
 
-
-    ningbo_data(target_fs=500)
+    # ningbo_data(target_fs=500)
+    ningbo_data(target_fs=args.fs)
 
