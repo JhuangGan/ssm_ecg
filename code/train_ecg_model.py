@@ -518,10 +518,12 @@ def cli_main():
     trainer = Trainer(
         logger=tb_logger,
         max_epochs=args.epochs,
-        gpus=1 if args.gpu else 1,
+
+        gpus=[2],
         accelerator='gpu',
-        auto_select_gpus=True,
-        devices='auto',
+        
+        # devices='auto',
+        # auto_select_gpus=True,
         callbacks=[ModelCheckpoint(monitor='val/val_macro_agg', mode='max')],
         # resume_from_checkpoint=None if args.checkpoint_path == "" else args.checkpoint_path
     )
