@@ -518,7 +518,7 @@ def cli_main():
     trainer = Trainer(
         logger=tb_logger,
         max_epochs=args.epochs,
-        # gpus=2 if args.gpu else 1,
+        gpus=1 if args.gpu else 1,
         accelerator='gpu',
         auto_select_gpus=True,
         devices='auto',
