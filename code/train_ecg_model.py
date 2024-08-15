@@ -522,7 +522,7 @@ def cli_main():
         gpus=[3],
         accelerator='gpu',
         
-        # devices=[2,3], 有bug，无法pickle s4
+        # devices=[2,3], 有bug，无法pickle s4, gpus=[2,3]也会这样
         # auto_select_gpus=True,
         callbacks=[ModelCheckpoint(monitor='val/val_macro_agg', mode='max')],
         # resume_from_checkpoint=None if args.checkpoint_path == "" else args.checkpoint_path
