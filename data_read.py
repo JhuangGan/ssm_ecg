@@ -8,24 +8,19 @@ from pathlib import Path
 
 
 if __name__ == '__main__':
-    target_fs=100
-    data_root=Path("./data/")
+
     target_root=Path("./data")
-    if not isdir(data_root):
-        os.makedirs(data_root)
     if not isdir(target_root):
         os.makedirs(target_root)
 
-    data_folder_ptb_xl = data_root/"ptb_xl/"
-    target_folder_ptb_xl = target_root/("ptb_xl_fs"+str(target_fs))
+    target_folder_ptb_xl = target_root/("Ningbo_npys_fs500")
     
-    target_root_ptb_xl = Path(".") if target_folder_ptb_xl is None else target_folder_ptb_xl
     #print(target_root_ptb_xl)
     target_root_ptb_xl.mkdir(parents=True, exist_ok=True)
 
     df_ptb_xl, lbl_itos_ptb_xl, mean_ptb_xl, std_ptb_xl = load_dataset(target_root_ptb_xl,df_mapped=False)
 
-    print(df_ptb_xl['label_diag_superclass'][10:20])
+    print(df_ptb_xl)
     # print(lbl_itos_ptb_xl)
     # print(mean_ptb_xl)
     # print(std_ptb_xl)
