@@ -519,10 +519,10 @@ def cli_main():
         logger=tb_logger,
         max_epochs=args.epochs,
 
-        # gpus=[2],
+        gpus=[2, 3],
         accelerator='gpu',
         
-        devices=[2,3],
+        # devices=[2,3], 有bug，无法pickle s4
         # auto_select_gpus=True,
         callbacks=[ModelCheckpoint(monitor='val/val_macro_agg', mode='max')],
         # resume_from_checkpoint=None if args.checkpoint_path == "" else args.checkpoint_path
