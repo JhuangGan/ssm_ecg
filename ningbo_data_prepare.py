@@ -37,7 +37,7 @@ def prepare_data_ningbo(data_path, min_cnt=10, target_fs=100, channels=12, targe
         for filename in tqdm(filenames):
             # data_path='D:/Works/FW/WorkNoteLog/2407/paper10/gitclone_repo/ssm_ecg/data/Ningbo_pth'
             
-            file = torch.load(data_path/filename, weights_only=False)
+            file = torch.load(data_path/filename)
             
             
             data = file['image']  ## 仅仅保存ecg的部分
