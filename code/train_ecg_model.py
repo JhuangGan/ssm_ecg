@@ -332,6 +332,9 @@ def parse_args(parent_parser):
     parser.add_argument("--cpc_bn_encoder", action='store_true', default=False)
 
     parser.add_argument("--add_info", type=str, default='')
+
+    # 新增
+    parser.add_argument("--single_gpu_choose", default=2, type=int)
     return parser
 
 
@@ -521,7 +524,7 @@ def cli_main():
         logger=tb_logger,
         max_epochs=args.epochs,
 
-        gpus=[3],
+        gpus=[args.single_gpu_choose],
         accelerator='gpu',
         # accelerator="cuda", 
         # devices=find_usable_cuda_devices(2),

@@ -385,6 +385,9 @@ def add_default_args():
         default=False
     )
     parser.add_argument("--refresh-rate", dest="refresh_rate", type=int, default=0)
+
+    # 新增
+    parser.add_argument("--single_gpu_choose", default=2, type=int)
     
     return parser
              
@@ -450,7 +453,7 @@ if __name__ == '__main__':
         benchmark=True,
     
         # gpus=hparams.gpus,
-        gpus=[2],
+        gpus=[hparams.single_gpu_choose],
         accelerator='gpu',
         # devices='auto',
         num_nodes=hparams.num_nodes,
