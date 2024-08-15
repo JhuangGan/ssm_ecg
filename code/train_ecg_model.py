@@ -31,8 +31,6 @@ from dl_models.s4_model import S4Model
 from mlxtend.evaluate import confusion_matrix
 
 
-from lightning.pytorch.accelerators import find_usable_cuda_devices
-
 logger = create_logger(__name__)
 
 
