@@ -519,7 +519,7 @@ def cli_main():
         logger=tb_logger,
         max_epochs=args.epochs,
 
-        gpus=[2, 3],
+        gpus=[3],
         accelerator='gpu',
         
         # devices=[2,3], 有bug，无法pickle s4
