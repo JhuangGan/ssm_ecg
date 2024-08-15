@@ -13,7 +13,7 @@ if __name__ == '__main__':
     if not isdir(target_root):
         os.makedirs(target_root)
 
-    target_folder_ptb_xl = target_root/("Ningbo_npys_fs500")
+    target_root_ptb_xl = target_root/("Ningbo_npys_fs500")
     
     #print(target_root_ptb_xl)
     target_root_ptb_xl.mkdir(parents=True, exist_ok=True)
