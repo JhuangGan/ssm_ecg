@@ -521,10 +521,10 @@ def cli_main():
         logger=tb_logger,
         max_epochs=args.epochs,
 
-        # gpus=[3],
-        # accelerator='gpu',
-        accelerator="cuda", 
-        devices=find_usable_cuda_devices(2),
+        gpus=[3],
+        accelerator='gpu',
+        # accelerator="cuda", 
+        # devices=find_usable_cuda_devices(2),
         
         # devices=[2,3], 有bug，无法pickle s4, gpus=[2,3]也会这样
         # auto_select_gpus=True,
