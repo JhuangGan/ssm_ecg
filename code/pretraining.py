@@ -450,7 +450,7 @@ if __name__ == '__main__':
         benchmark=True,
     
         # gpus=hparams.gpus,
-        gpus=[3],
+        gpus=[2],
         accelerator='gpu',
         # devices='auto',
         num_nodes=hparams.num_nodes,
