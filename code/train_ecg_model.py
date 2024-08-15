@@ -521,7 +521,7 @@ def cli_main():
         # gpus=2 if args.gpu else 1,
         accelerator='gpu',
         auto_select_gpus=True,
-        devices=-1,
+        devices='auto',
         callbacks=[ModelCheckpoint(monitor='val/val_macro_agg', mode='max')],
         # resume_from_checkpoint=None if args.checkpoint_path == "" else args.checkpoint_path
     )
