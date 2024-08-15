@@ -519,12 +519,8 @@ def cli_main():
         logger=tb_logger,
         max_epochs=args.epochs,
 
-        # gpus=[3],
-        # accelerator='gpu',
-
+        gpus=[3],
         accelerator='gpu',
-        gpus=2,  # 指定使用2块GPU
-        auto_select_gpus=True,  # 自动选择未被占用的GPU
         
         # devices=[2,3], 有bug，无法pickle s4, gpus=[2,3]也会这样
         # auto_select_gpus=True,
