@@ -426,8 +426,10 @@ if __name__ == '__main__':
         save_top_k=-1,  ## 每个模型都保存
 		save_last=True,
         verbose=True,  ## 打印输出
-        monitor= 'macro_auc_agg0' if hparams.finetune else 'val_loss' ,
-        mode='max' if hparams.finetune else 'min')
+        # monitor= 'macro_auc_agg0' if hparams.finetune else 'val_loss' ,
+        # mode='max' if hparams.finetune else 'min'
+        monitor= 'macro_auc_agg0',  #修改一下
+        mode='max')
 
     lr_monitor = LearningRateMonitor(logging_interval="step")
     lr_monitor2 = LRMonitorCallback(start=False,end=True)#interval="step")
