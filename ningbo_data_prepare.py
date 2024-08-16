@@ -19,6 +19,7 @@ import torch
 import resampy
 
 from argparse import ArgumentParser
+import random
 
 def prepare_data_ningbo(data_path, min_cnt=10, target_fs=100, channels=12, target_folder=None, recreate_data=True):
     # data_path = Path(data_path)
@@ -47,11 +48,11 @@ def prepare_data_ningbo(data_path, min_cnt=10, target_fs=100, channels=12, targe
             df_ningbo['age'].append(file['age'])
             df_ningbo['sex'].append(file['sex'])
             df_ningbo['pid'].append(file['pid'])
-            df_ningbo['label'].append(str(file['label']))  ## tensor，转为str
+            df_ningbo['label'].append(str(random.randint(1, 5)))  ## tensor，转为str
 
             df_ningbo['dataset'].append('ningbo')
             df_ningbo['data'].append(filename+".npy")
-            df_ningbo['strat_fold'].append(-1)  ## 全部设为-1无标签
+            df_ningbo['strat_fold'].append(int(random.randint(1, 10)))  ## 全部设为-1无标签
 
             # 降采样部分
             resampled_data = resampy.resample(data, 500, target_fs, axis=0, channels=12)
