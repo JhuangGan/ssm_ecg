@@ -64,7 +64,7 @@ def parse_args():
     parser.add_argument("--test", action="store_true", default=False)
     parser.add_argument("--verbose", action="store_true", default=False)
     parser.add_argument("--cpc", action="store_true", default=False)
-    parser.add_argument("--model_location", type=str, detault='./')  ## 做了修改
+    parser.add_argument("--model_location") 
     parser.add_argument("--l_epochs", type=int, default=0,
                         help="number of head-only epochs (these are performed first)")
     parser.add_argument("--f_epochs", type=int, default=0,
