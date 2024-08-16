@@ -54,7 +54,7 @@ def prepare_data_ningbo(data_path, min_cnt=10, target_fs=100, channels=12, targe
             df_ningbo['strat_fold'].append(-1)  ## 全部设为-1无标签
 
             # 降采样部分
-            resampled_data = resampy.resample(data, 500, target_fs, axis=1)
+            resampled_data = resampy.resample(data, 500, target_fs, axis=0, channels=12)
 
             # print(filename)
             # 转成npy，仅仅保存ecg的部分
