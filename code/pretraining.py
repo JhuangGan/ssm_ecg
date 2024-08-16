@@ -414,7 +414,7 @@ if __name__ == '__main__':
         save_dir=hparams.output_path,
         #version="",#hparams.metadata.split(":")[0],
         name="")
-    print("Output directory:",logger.log_dir) 
+    print("Output directory:",logger.log_dir)
 
     if(MLFLOW_AVAILABLE):#requires env vars MLFLOW_TRACKING_USERNAME MLFLOW_TRACKING_PASSWORD MLFLOW_TRACKING_URI
         mlflow.set_experiment("nstrodt_cpc_ecg_old")
@@ -423,9 +423,9 @@ if __name__ == '__main__':
     checkpoint_callback = ModelCheckpoint(
         dirpath=logger.log_dir,
         filename="best_model",
-        save_top_k=1,
+        save_top_k=-1,  ## 每个模型都保存
 		save_last=True,
-        verbose=True,
+        verbose=True,  ## 打印输出
         monitor= 'macro_auc_agg0' if hparams.finetune else 'val_loss' ,
         mode='max' if hparams.finetune else 'min')
 
