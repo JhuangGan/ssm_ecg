@@ -199,7 +199,8 @@ class LightningCPC(pl.LightningModule):
             self.lbl_itos = lbl_itos
             tfms_ptb_xl_cpc = ToTensor() if self.hparams.normalize is False else transforms.Compose([Normalize(mean,std),ToTensor()])
             
-            max_fold_id = df_mapped.strat_fold.max() #unfortunately 1-based for PTB-XL; sometimes 100 (Ribeiro)
+            # max_fold_id = df_mapped.strat_fold.max() #unfortunately 1-based for PTB-XL; sometimes 100 (Ribeiro)
+            max_fold_id = 10  ## 修改为10
             df_train = df_mapped[df_mapped.strat_fold<(max_fold_id-1 if (self.hparams.finetune or self.hparams.exclude_val) else max_fold_id)]
             df_val = df_mapped[df_mapped.strat_fold==(max_fold_id-1 if (self.hparams.finetune or self.hparams.exclude_val) else max_fold_id)]
             if(self.hparams.finetune):
