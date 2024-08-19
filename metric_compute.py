@@ -31,7 +31,7 @@ def multilabel_f1score(label, predict, label_test, predict_test):
         
         best_f1_score_test, f1_score_list_test, threshold_index_test = bestf1score(label_test[i], predict_test[i])
         
-        test_f1 = f1_score_list[threshold_index]
+        test_f1 = f1_score_list_test[threshold_index]
 
         best_f1_score_list_test.append(test_f1)
 
