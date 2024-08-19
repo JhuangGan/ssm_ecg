@@ -28,7 +28,8 @@ def multilabel_f1score(label, predict):
 
     return macro_best_f1_score, threshold_list
 
-def test_f1_score(label, predict,threshold):
+def test_f1_score(label, predict, threshold):
+    print(threshold)
     result = np.greater(predict, threshold)
 
     predict = result.astype(int)
