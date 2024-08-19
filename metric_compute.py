@@ -31,17 +31,17 @@ def multilabel_f1score(label, predict):
 def test_f1_score(label, predict,threshold):
     result = np.greater(predict, threshold)
 
-    # 将布尔矩阵中的True和False转换为1和0
     predict = result.astype(int)
+    print(predict)
     label = [[label[i][j] for i in range(len(label))] for j in range(len(label[0]))]
     predict = [[predict[i][j] for i in range(len(predict))] for j in range(len(predict[0]))]
 
-    best_f1_score_list = []
-    for i in range(len(label)):
-        f1 = f1_score(label[:,i], predict[:,i])
-        best_f1_score_list.append(f1)
+    # best_f1_score_list = []
+    # for i in range(len(label)):
+    #     f1 = f1_score(label[:,i], predict[:,i])
+    #     best_f1_score_list.append(f1)
     
-    return best_f1_score_list.mean()
+    # return best_f1_score_list.mean()
 
 
 if __name__ == '__main__':
