@@ -28,10 +28,17 @@ def multilabel_f1score(label, predict):
 
     return macro_best_f1_score, threshold_list
 
-def test_f1_score(preds, targs,threshold):
-    preds = 1 if preds >= threshold else 0
-    f1_score,_ = multilabel_f1score(targs, preds)
-    return f1_score
+def test_f1_score(label, predict,threshold):
+    predict = 1 if predict >= threshold else 0
+    label = [[label[i][j] for i in range(len(label))] for j in range(len(label[0]))]
+    predict = [[predict[i][j] for i in range(len(predict))] for j in range(len(predict[0]))]
+
+    best_f1_score_list = []
+    for i in range(len(label)):
+        f1 = f1_score(label, predict)
+        best_f1_score_list.append(f1)
+    
+    return best_f1_score_list.mean()
 
 
 if __name__ == '__main__':
