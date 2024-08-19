@@ -38,7 +38,7 @@ def test_f1_score(label, predict,threshold):
 
     best_f1_score_list = []
     for i in range(len(label)):
-        f1 = f1_score(label[i], predict[i])
+        f1 = f1_score(label[:,i], predict[:,i])
         best_f1_score_list.append(f1)
     
     return best_f1_score_list.mean()
