@@ -382,7 +382,7 @@ def cli_main():
         nomemmap=args.nomemmap,
         combination=args.combination,
         filter_label=args.filter_label,
-        data_input_size=args.input_size,
+        data_input_size=args.input_size, 
         normalize=args.normalize,
         use_meta_information_in_head=args.use_meta_information_in_head
     )
@@ -529,7 +529,7 @@ def cli_main():
         
         # devices=[2,3], 有bug，无法pickle s4, gpus=[2,3]也会这样
         # auto_select_gpus=True,
-        callbacks=[ModelCheckpoint(monitor='val/val_macro_agg', mode='max')]
+        callbacks=[ModelCheckpoint(verbose=True, monitor='val/val_macro_agg', mode='max')]
         # resume_from_checkpoint=None if args.checkpoint_path == "" else args.checkpoint_path
     )
 

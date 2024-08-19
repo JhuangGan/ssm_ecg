@@ -884,6 +884,7 @@ def aggregate_predictions(preds,targs=None,idmap=None,aggregate_fn = np.mean,ver
         preds_aggregated = []
         targs_aggregated = []
         for i in np.unique(idmap):
+            ## 将相同id的进行聚合
             preds_local = preds[np.where(idmap==i)[0]]
             preds_aggregated.append(aggregate_fn(preds_local,axis=0))
             if targs is not None:

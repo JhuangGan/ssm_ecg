@@ -24,7 +24,7 @@ class S4Model(nn.Module):
         n_layers=4,
         dropout=0.2,
         prenorm=False,
-        l_max=1024,
+        l_max=1024,  ## input_size
         transposed_input=True,
         bn = False,
         bidirectional=False,
