@@ -525,7 +525,7 @@ def prepare_data_icbeb(data_folder, target_folder=None, channel_stoi=channel_sto
     return df_icbeb,lbl_itos_icbeb, mean_icbeb, std_icbeb
 
 # Cell
-def prepare_data_ptb_xl(data_path, min_cnt=10, target_fs=100, channels=12, channel_stoi=channel_stoi_default, target_folder=None, recreate_data=True):
+def prepare_data_ptb_xl(data_path, min_cnt=10, target_fs=100, channels=12, channel_stoi=channel_stoi_default, target_folder=None, recreate_data=True,rescaled=1):
     target_root_ptb_xl = Path(".") if target_folder is None else target_folder
     #print(target_root_ptb_xl)
     target_root_ptb_xl.mkdir(parents=True, exist_ok=True)
@@ -572,7 +572,7 @@ def prepare_data_ptb_xl(data_path, min_cnt=10, target_fs=100, channels=12, chann
             sigbufs, header = wfdb.rdsamp(str(filename))
             data = resample_data(sigbufs=sigbufs,channel_stoi=channel_stoi,channel_labels=header['sig_name'],fs=header['fs'],target_fs=target_fs,channels=channels)
             assert(target_fs<=header['fs'])
-            np.save(target_root_ptb_xl/(filename.stem+".npy"),data)
+            np.save(target_root_ptb_xl/(filename.stem+".npy"),data*rescaled)
             filenames.append(Path(filename.stem+".npy"))
         df_ptb_xl["data"] = filenames
 
