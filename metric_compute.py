@@ -29,7 +29,10 @@ def multilabel_f1score(label, predict):
     return macro_best_f1_score, threshold_list
 
 def test_f1_score(label, predict,threshold):
-    predict = 1 if predict >= threshold else 0
+    result = np.greater(predict, threshold)
+
+    # 将布尔矩阵中的True和False转换为1和0
+    predict = result.astype(int)
     label = [[label[i][j] for i in range(len(label))] for j in range(len(label[0]))]
     predict = [[predict[i][j] for i in range(len(predict))] for j in range(len(predict[0]))]
 
