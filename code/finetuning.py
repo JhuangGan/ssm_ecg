@@ -1006,8 +1006,13 @@ def run():
     ckpt_epoch_fin = 0
     train_mode = 'lin' if args.f_epochs == 0 else "fin"
     
-    save_model_at = os.path.join(os.path.dirname(
-            args.model_file), "n=" + str(args.noise_level) + "_"+tag + train_mode +'_'+args.label_class+'_input_size'+str(args.input_size)+'_'+str(args.target_folder)+"_finetuned") if args.save_model_at is None else args.save_model_at
+    if args.target_folder == './data/ptb_xl_fs500_mutual_rescaled':
+        save_model_at = os.path.join(os.path.dirname(
+            args.model_file), "n=" + str(args.noise_level) + "_"+tag + train_mode +'_'+args.label_class+'_input_size'+str(args.input_size)+"_mutual_finetuned") if args.save_model_at is None else args.save_model_at
+
+    else:
+        save_model_at = os.path.join(os.path.dirname(
+            args.model_file), "n=" + str(args.noise_level) + "_"+tag + train_mode +'_'+args.label_class+'_input_size'+str(args.input_size)+"_finetuned") if args.save_model_at is None else args.save_model_at
     
     filename = os.path.join(os.path.dirname(
         save_model_at), "t=" + args.trial_nr+"_n=" + str(args.noise_level) + "_"+tag + "res_" + train_mode +".pkl")
