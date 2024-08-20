@@ -685,6 +685,11 @@ def train_model(model, train_loader, valid_loader, test_loader, epochs, loss_fn,
 
         print("loss:", total_loss_one_epoch)
         print("aggregated macro:", macro_agg)
+        print('save epoch model at', save_model_at)
+        if head_only:
+            torch.save(model.state_dict(), '{}_head_only_model'.format(epoch))
+        else:
+            torch.save(model.state_dict(), 'after_head_{}_model'.format(epoch))
         if macro_agg > best_macro_agg:
             print('save model at', save_model_at)
             torch.save(model.state_dict(), save_model_at)
