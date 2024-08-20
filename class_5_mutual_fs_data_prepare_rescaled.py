@@ -11,7 +11,7 @@ from argparse import ArgumentParser
 
 if __name__ == '__main__':
     parser = ArgumentParser(add_help=False)
-    parser.add_argument("--fs", type=str, default='')
+    parser.add_argument("--fs", type=int, default=500)
 
     args = parser.parse_args()
 
