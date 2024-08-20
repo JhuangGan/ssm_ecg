@@ -564,7 +564,7 @@ def load_model(linear_evaluation, num_classes, use_pretrained, discriminative_lr
 
 
 def evaluate(model, dataloader, idmap, lbl_itos, base_model='xresnet1d',
-             ptb_to_zheng=False, use_meta_information_in_head=False, info=''):
+             ptb_to_zheng=False, use_meta_information_in_head=False, info='', save_model_at='./'):
     if use_meta_information_in_head:
         preds, targs = eval_model_with_meta(model, dataloader, base_model=base_model)
     else:
@@ -576,14 +576,14 @@ def evaluate(model, dataloader, idmap, lbl_itos, base_model='xresnet1d',
 
     preds = torch.sigmoid(torch.tensor(preds)).numpy() # improves performance for aggregation
     dic = {'preds': preds, 'targs':targs}
-    torch.save(dic, './'+info+'preds_targs.pth')
+    torch.save(dic, os.join(save_model_at,info+'preds_targs.pth'))
 
 
     scores = eval_scores(targs, preds, classes=lbl_itos, parallel=True)
     preds_agg, targs_agg = aggregate_predictions(preds, targs, idmap)
 
     dic = {'preds': preds_agg, 'targs':targs_agg}
-    torch.save(dic, './'+info+'agg_preds_targs.pth')
+    torch.save(dic, os.join(save_model_at,info+'agg_preds_targs.pth'))
 
     # 增加sigmoid的
     preds_sig = torch.sigmoid(torch.Tensor(preds)).numpy()
@@ -1083,19 +1083,19 @@ def run():
     else:
         if args.target_folder == './data/ptb_xl_fs500_mutual_rescaled':
             preds, eval_macro, eval_macro_agg, scores_agg = evaluate(
-                model, valid_loader, val_idmap, lbl_itos, ptb_to_zheng=args.ptb_to_zheng, base_model=args.base_model, info='val_'+str(args.label_class)+'_input_size'+str(args.input_size)+'_mutual')
+                model, valid_loader, val_idmap, lbl_itos, ptb_to_zheng=args.ptb_to_zheng, base_model=args.base_model, info='val_'+str(args.label_class)+'_input_size'+str(args.input_size)+'_mutual', save_model_at=save_model_at)
         else:
             preds, eval_macro, eval_macro_agg, scores_agg = evaluate(
-                model, valid_loader, val_idmap, lbl_itos, ptb_to_zheng=args.ptb_to_zheng, base_model=args.base_model, info='val_'+str(args.label_class)+'_input_size'+str(args.input_size))
+                model, valid_loader, val_idmap, lbl_itos, ptb_to_zheng=args.ptb_to_zheng, base_model=args.base_model, info='val_'+str(args.label_class)+'_input_size'+str(args.input_size), save_model_at=save_model_at)
 
         result_macros.append(eval_macro)
         result_macros_agg.append(eval_macro_agg)
         if args.target_folder == './data/ptb_xl_fs500_mutual_rescaled':
             preds, test_macro, test_macro_agg, scores_agg = evaluate(
-                model, test_loader, test_idmap, lbl_itos, ptb_to_zheng=args.ptb_to_zheng, base_model=args.base_model, info='test_'+str(args.label_class)+'_input_size'+str(args.input_size)+'_mutual')
+                model, test_loader, test_idmap, lbl_itos, ptb_to_zheng=args.ptb_to_zheng, base_model=args.base_model, info='test_'+str(args.label_class)+'_input_size'+str(args.input_size)+'_mutual', save_model_at=save_model_at)
         else:
             preds, test_macro, test_macro_agg, scores_agg = evaluate(
-                model, test_loader, test_idmap, lbl_itos, ptb_to_zheng=args.ptb_to_zheng, base_model=args.base_model, info='test_'+str(args.label_class)+'_input_size'+str(args.input_size))
+                model, test_loader, test_idmap, lbl_itos, ptb_to_zheng=args.ptb_to_zheng, base_model=args.base_model, info='test_'+str(args.label_class)+'_input_size'+str(args.input_size), save_model_at=save_model_at)
         
         test_macros.append(test_macro)
         test_macros_agg.append(test_macro_agg)
