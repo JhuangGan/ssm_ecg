@@ -30,6 +30,7 @@ from dl_models.s4_model import S4Model
 # from clinical_ts.data_modifiers import ToOneHot
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
+
 ptb_num_classes = {"label_all": 71, "label_diag": 44, "label_form": 19,
                    "label_rhythm": 12, "label_diag_subclass": 23, "label_diag_superclass": 5}
 chapman_num_classes = {"label_all": 67,
@@ -90,6 +91,10 @@ def parse_args():
     parser.add_argument("--input_size", default=250, type=int)
     parser.add_argument("--save_model_at")
     parser.add_argument("--use_meta_information_in_head", action="store_true", default=False)
+
+    # 增加
+    parser.add_argument("--gpu_device", type=int, default=3)
+
     args = parser.parse_args()
     return args
 
@@ -957,6 +962,11 @@ def run():
     #     num_classes = zheng_num_classes[args.label_class] if args.num_classes is None else args.num_classes
     # else:
     #     num_classes = ptb_num_classes[args.label_class] if args.num_classes is None else args.num_classes
+
+
+    if device == 'cuda':
+        torch.cuda.set_device(args.gpu_device)
+
     _, train_loader, _ = get_dataset(
         args.batch_size, args.num_workers, [args.target_folder], folds=args.folds, 
         test=args.test, normalize=args.normalize, label_class=args.label_class, 
