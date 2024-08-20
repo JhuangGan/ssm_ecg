@@ -58,15 +58,26 @@ if __name__ == '__main__':
 
     macro_best_f1_score, thresholds_list = multilabel_f1score(targs, preds)
 
-    macro_auc = np.round(roc_auc_score(targs, preds, average='macro'), 3)
-    macro_aupr = np.round(average_precision_score(targs, preds, average='macro'), 3)
+    macro_auc = np.round(roc_auc_score(targs, preds, average='macro'), 5)
+    macro_aupr = np.round(average_precision_score(targs, preds, average='macro'), 5)
 
     test_dic = torch.load('./test_'+str(args.preds_targs_path)+'.pth')
     test_preds = test_dic['preds']
     test_targs = test_dic['targs']
 
-    test_f1 = test_f1_score(test_preds, test_targs,thresholds_list)
+    test_macro_auc = np.round(roc_auc_score(test_targs, test_preds, average='macro'), 5)
+    test_macro_aupr = np.round(average_precision_score(test_targs, test_preds, average='macro'), 5)
 
+    test_preds = [[1 if pred > thresh else 0 for pred, thresh in zip(pred_row, thresholds_list)] for pred_row in test_preds]
+    # print(test_preds)
 
-    print(f'info:{args.info},f1:{macro_best_f1_score},auc:{macro_auc}, aupr:{macro_aupr}')
+    test_f1_list = []
+    for i in range(len(test_targs)):
+        f1 = f1_score(test_targs[i], test_preds[i])
+        test_f1_list.append(f1)
+
+    
+
+    print(f'val_f1:{macro_best_f1_score},val_auc:{macro_auc}, val_aupr:{macro_aupr}')
+    print(f'test_f1:{sum(test_f1_list)/len(test_f1_list)}, test_auc:{test_macro_auc}, test_aupr:{test_macro_aupr}')
 
