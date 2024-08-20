@@ -73,6 +73,7 @@ if __name__ == '__main__':
 
     test_f1_list = []
     for i in range(len(test_targs)):
+        print(len(test_targs[i]))
         f1 = f1_score(test_targs[i], test_preds[i])
         test_f1_list.append(f1)
 
