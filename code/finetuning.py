@@ -693,7 +693,7 @@ def train_model(model, train_loader, valid_loader, test_loader, epochs, loss_fn,
         
         if head_only:
             save_temp = os.path.join(os.path.dirname(save_model_at),'{}_head_only_model.pt'.format(epoch))
-            torch.save(model.state_dict(), )
+            torch.save(model.state_dict(), save_temp)
             print('save epoch model at', save_temp)
         else:
             save_temp = os.path.join(os.path.dirname(save_model_at),'after_head_{}_model.pt'.format(epoch))
