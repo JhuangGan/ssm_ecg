@@ -69,11 +69,11 @@ if __name__ == '__main__':
     test_macro_aupr = np.round(average_precision_score(test_targs, test_preds, average='macro'), 5)
 
     test_preds = [[1 if pred > thresh else 0 for pred, thresh in zip(pred_row, thresholds_list)] for pred_row in test_preds]
-    # print(test_preds)
+    print(len(thresholds_list))
 
     test_f1_list = []
     for i in range(len(test_targs)):
-        print(len(test_targs[i]))
+        # print(len(test_targs[i]))
         f1 = f1_score(test_targs[i], test_preds[i])
         test_f1_list.append(f1)
 
