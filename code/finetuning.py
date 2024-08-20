@@ -582,12 +582,12 @@ def evaluate(model, dataloader, idmap, lbl_itos, base_model='xresnet1d',
     scores = eval_scores(targs, preds, classes=lbl_itos, parallel=True)
     preds_agg, targs_agg = aggregate_predictions(preds, targs, idmap)
 
-    dic = {'preds': preds_agg, 'targs_agg':targs}
+    dic = {'preds': preds_agg, 'targs':targs_agg}
     torch.save(dic, './'+info+'agg_preds_targs.pth')
 
     # 增加sigmoid的
     preds_sig = torch.sigmoid(torch.Tensor(preds)).numpy()
-    dic = {'preds': preds_sig, 'targs_agg':targs}
+    dic = {'preds': preds_sig, 'targs':targs_agg}
     torch.save(dic, './'+info+'sig_agg_preds_targs.pth')
 
     # scores_agg = scores
