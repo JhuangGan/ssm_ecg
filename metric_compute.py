@@ -99,25 +99,25 @@ def all_metric_compute(val_targs, val_preds, test_targs, test_preds, macro_acc_f
 
 
 if __name__ == '__main__':
-    # parser = ArgumentParser(add_help=False)
-    # parser.add_argument("--preds_targs_path", type=str, default='')
-    # parser.add_argument("--info", type=str, default='')
-    # parser.add_argument("--macro_acc", action="store_true", default=False)
+    parser = ArgumentParser(add_help=False)
+    parser.add_argument("--preds_targs_path", type=str, default='')
+    parser.add_argument("--info", type=str, default='')
+    parser.add_argument("--macro_acc", action="store_true", default=False)
 
-    # args = parser.parse_args()
+    args = parser.parse_args()
 
-    # val_dic = torch.load('./val_'+str(args.preds_targs_path)+'.pth')
-    # val_preds = val_dic['preds']
-    # val_targs = val_dic['targs']
+    val_dic = torch.load('./val_'+str(args.preds_targs_path)+'.pth')
+    val_preds = val_dic['preds']
+    val_targs = val_dic['targs']
 
-    # test_dic = torch.load('./test_'+str(args.preds_targs_path)+'.pth')
-    # test_preds = test_dic['preds']
-    # test_targs = test_dic['targs']
+    test_dic = torch.load('./test_'+str(args.preds_targs_path)+'.pth')
+    test_preds = test_dic['preds']
+    test_targs = test_dic['targs']
 
-    val_preds = [[0.1, 0.2,0.3],[0.3,0.2,0.6],[0.1, 0.2,0.3],[0.3,0.2,0.6]]
-    val_targs = [[0,1,1],[1,0,1],[1,1,1],[1,1,0]]
-    test_preds = [[0.1, 0.2,0.3],[0.3,0.2,0.6],[0.1, 0.2,0.3],[0.3,0.2,0.6]]
-    test_targs = [[0,1,1],[1,0,1],[1,1,1],[1,0,1]]
+    # val_preds = [[0.1, 0.2,0.3],[0.3,0.2,0.6],[0.1, 0.2,0.3],[0.3,0.2,0.6]]
+    # val_targs = [[0,1,1],[1,0,1],[1,1,1],[1,1,0]]
+    # test_preds = [[0.1, 0.2,0.3],[0.3,0.2,0.6],[0.1, 0.2,0.3],[0.3,0.2,0.6]]
+    # test_targs = [[0,1,1],[1,0,1],[1,1,1],[1,0,1]]
 
 
     val_auc_list = []
