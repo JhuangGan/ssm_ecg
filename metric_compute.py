@@ -135,11 +135,13 @@ if __name__ == '__main__':
 
     
     n_bootstraps = args.n_bootstraps
-    for i in tqdm(range(n_bootstraps)):        
+    for i in tqdm(range(n_bootstraps)): 
+        print(val_preds[0])    
         val_targs_sub = resample(val_targs, replace=True, n_samples=int(1*len(val_targs)), random_state=np.random.randint(1, 10000))
         val_preds_sub = resample(val_preds, replace=True, n_samples=int(1*len(val_preds)), random_state=np.random.randint(1, 10000))
 
-        print(val_preds_sub.shape)
+        print(val_preds_sub[0])
+
         test_targs_sub = resample(test_targs, replace=True, n_samples=int(1*len(test_targs)), random_state=np.random.randint(1, 10000))
         test_preds_sub = resample(test_preds, replace=True, n_samples=int(1*len(test_preds)), random_state=np.random.randint(1, 10000))
 
