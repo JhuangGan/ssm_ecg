@@ -18,8 +18,8 @@ def multilabel_f1score(label, predict):
     label = [[label[i][j] for i in range(len(label))] for j in range(len(label[0]))]
     predict = [[predict[i][j] for i in range(len(predict))] for j in range(len(predict[0]))]
     
-    best_f1_score_list = []
-    threshold_list = []
+    best_f1_score_list = np.array()
+    threshold_list = np.array()
     for i in range(len(label)):
         best_f1_score, threshold = bestf1score(label[i], predict[i])
         best_f1_score_list.append(best_f1_score)
@@ -81,7 +81,7 @@ def all_metric_compute(val_targs, val_preds, test_targs, test_preds, macro_acc_f
     test_preds = [[test_preds[i][j] for i in range(len(test_preds))] for j in range(len(test_preds[0]))]
     test_targs = [[test_targs[i][j] for i in range(len(test_targs))] for j in range(len(test_targs[0]))]
 
-    test_f1_list = []
+    test_f1_list = np.array()
     for i in range(len(test_targs)):
         f1 = f1_score(test_targs[i], test_preds[i])
         test_f1_list.append(f1)
@@ -120,20 +120,20 @@ if __name__ == '__main__':
     # test_targs = [[0,1,1],[1,0,1],[1,1,1],[1,0,1]]
 
 
-    val_auc_list = []
-    val_f1_list = []
-    val_aupr_list = []
-    val_macro_acc_list = []
-    val_sub_acc_list = []
+    val_auc_list = np.array()
+    val_f1_list = np.array()
+    val_aupr_list = np.array()
+    val_macro_acc_list = np.array()
+    val_sub_acc_list = np.array()
 
-    test_auc_list = []
-    test_f1_list = []
-    test_aupr_list = []
-    test_macro_acc_list = []
-    test_sub_acc_list = []
+    test_auc_list = np.array()
+    test_f1_list = np.array()
+    test_aupr_list = np.array()
+    test_macro_acc_list = np.array()
+    test_sub_acc_list = np.array()
 
     
-    n_bootstraps = 2
+    n_bootstraps = 1000
     for i in range(n_bootstraps):
         
         val_targs_sub = resample(val_targs, replace=True, n_samples=int(1*len(val_targs)), random_state=np.random.randint(1, 10000))
@@ -158,5 +158,7 @@ if __name__ == '__main__':
         test_macro_acc_list.append(test_macro_acc)
         test_sub_acc_list.append(test_sub_acc)
 
-    print(val_auc_list, val_f1_list, val_aupr_list, val_macro_acc_list, val_sub_acc_list)
-    print(test_auc_list, test_f1_list, test_aupr_list, test_macro_acc_list, test_sub_acc_list)
+
+
+    print(val_auc_list.mean(), val_f1_list.mean(), val_aupr_list.mean(), val_macro_acc_list.mean(), val_sub_acc_list.mean())
+    print(test_auc_list.mean(), test_f1_list.mean(), test_aupr_list.mean(), test_macro_acc_list.mean(), test_sub_acc_list.mean())
