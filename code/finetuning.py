@@ -982,6 +982,8 @@ def run():
     if device == 'cuda':
         torch.cuda.set_device(args.gpu_device)
 
+    # 数据部分
+
     _, train_loader, _ = get_dataset(
         args.batch_size, args.num_workers, [args.target_folder], folds=args.folds, 
         test=args.test, normalize=args.normalize, label_class=args.label_class, 
@@ -1037,6 +1039,8 @@ def run():
     
     filename = os.path.join(os.path.dirname(
         save_model_at), "t=" + args.trial_nr+"_n=" + str(args.noise_level) + "_"+tag + "res_" + train_mode +".pkl")
+
+    # 模型部分
 
     model = load_model(
         args.linear_evaluation, num_classes, args.use_pretrained or args.load_finetuned, hidden=args.hidden,
