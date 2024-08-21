@@ -4,6 +4,7 @@ import numpy as np
 import torch
 from argparse import ArgumentParser
 from sklearn.metrics import roc_auc_score, average_precision_score, accuracy_score
+from sklearn.utils import resample
 
 
 def bestf1score(label, predict):
@@ -29,7 +30,7 @@ def multilabel_f1score(label, predict):
     return macro_best_f1_score, threshold_list
 
 
-def macro_acc_and_subsample_acc(true, pred, thresholds_list):
+def macro_acc_and_subsample_acc(true, pred):
 
     sub_acc = sum([pred[i]==true[i] for i in range(len(pred))])/len(pred)
 
@@ -41,48 +42,40 @@ def macro_acc_and_subsample_acc(true, pred, thresholds_list):
     pred_unzip = [row[i] for row in pred for i in range(len(pred[0]))]
     true_unzip = [row[i] for row in true for i in range(len(true[0]))]
 
-    pred_unzip = [[1 if pred > thresh else 0 for pred, thresh in zip(pred_row, thresholds_list)] for pred_row in pred_unzip]
-
     macro_acc = accuracy_score(true_unzip, pred_unzip)
     # print(macro_acc)
 
     return sub_acc, macro_acc
 
 
-if __name__ == '__main__':
-    parser = ArgumentParser(add_help=False)
-    parser.add_argument("--preds_targs_path", type=str, default='')
-    parser.add_argument("--info", type=str, default='')
-    parser.add_argument("--macro_acc", action="store_true", default=False)
 
-    args = parser.parse_args()
+def all_metric_compute(val_targs, val_preds, test_targs, test_preds, macro_acc_flag=False):
 
-    dic = torch.load('./val_'+str(args.preds_targs_path)+'.pth')
-    preds = dic['preds']
-    targs = dic['targs']
+    val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc = None, None, None, None
 
-    macro_best_f1_score, thresholds_list = multilabel_f1score(targs, preds)
+    val_macro_auc = np.round(roc_auc_score(val_targs, val_preds, average='macro'), 5)
+    val_macro_aupr = np.round(average_precision_score(val_targs, val_preds, average='macro'), 5)
+    
+    val_macro_best_f1_score, val_thresholds_list = multilabel_f1score(val_targs, val_preds)
 
-    if args.macro_acc:
-        val_sub_acc, val_macro_acc = macro_acc_and_subsample_acc(targs, preds, thresholds_list)
-        print(f"val_macro_acc:{val_macro_acc}, val_sub_acc:{val_sub_acc}")
+    val_preds = [[1 if pred > thresh else 0 for pred, thresh in zip(pred_row, val_thresholds_list)] for pred_row in val_preds]
 
-    macro_auc = np.round(roc_auc_score(targs, preds, average='macro'), 5)
-    macro_aupr = np.round(average_precision_score(targs, preds, average='macro'), 5)
 
-    test_dic = torch.load('./test_'+str(args.preds_targs_path)+'.pth')
-    test_preds = test_dic['preds']
-    test_targs = test_dic['targs']
+    if macro_acc_flag:
+        val_sub_acc, val_macro_acc = macro_acc_and_subsample_acc(val_targs, val_preds)
+        # print(f"val_macro_acc:{val_macro_acc}, val_sub_acc:{val_sub_acc}")
+
 
 
     test_macro_auc = np.round(roc_auc_score(test_targs, test_preds, average='macro'), 5)
     test_macro_aupr = np.round(average_precision_score(test_targs, test_preds, average='macro'), 5)
 
-    test_preds = [[1 if pred > thresh else 0 for pred, thresh in zip(pred_row, thresholds_list)] for pred_row in test_preds]
+    test_preds = [[1 if pred > thresh else 0 for pred, thresh in zip(pred_row, val_thresholds_list)] for pred_row in test_preds]
 
-    if args.macro_acc:
+
+    if macro_acc_flag:
         test_sub_acc, test_macro_acc = macro_acc_and_subsample_acc(test_targs, test_preds)
-        print(f"test_macro_acc:{test_macro_acc}, test_sub_acc:{test_sub_acc}")
+        # print(f"test_macro_acc:{test_macro_acc}, test_sub_acc:{test_sub_acc}")
 
 
     test_preds = [[test_preds[i][j] for i in range(len(test_preds))] for j in range(len(test_preds[0]))]
@@ -90,12 +83,80 @@ if __name__ == '__main__':
 
     test_f1_list = []
     for i in range(len(test_targs)):
-        
         f1 = f1_score(test_targs[i], test_preds[i])
         test_f1_list.append(f1)
+    
+    test_f1 = sum(test_f1_list)/len(test_f1_list)
+
+    
+    return val_macro_auc, val_macro_best_f1_score, val_macro_aupr, test_macro_auc, test_f1, test_macro_aupr, val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc
+    
 
 
 
-    print(f'val_f1:{macro_best_f1_score},val_auc:{macro_auc}, val_aupr:{macro_aupr}')
-    print(f'test_f1:{sum(test_f1_list)/len(test_f1_list)}, test_auc:{test_macro_auc}, test_aupr:{test_macro_aupr}')
 
+
+
+
+if __name__ == '__main__':
+    # parser = ArgumentParser(add_help=False)
+    # parser.add_argument("--preds_targs_path", type=str, default='')
+    # parser.add_argument("--info", type=str, default='')
+    # parser.add_argument("--macro_acc", action="store_true", default=False)
+
+    # args = parser.parse_args()
+
+    # val_dic = torch.load('./val_'+str(args.preds_targs_path)+'.pth')
+    # val_preds = val_dic['preds']
+    # val_targs = val_dic['targs']
+
+    # test_dic = torch.load('./test_'+str(args.preds_targs_path)+'.pth')
+    # test_preds = test_dic['preds']
+    # test_targs = test_dic['targs']
+
+    val_preds = [[0.1, 0.2,0.3],[0.3,0.2,0.6],[0.1, 0.2,0.3],[0.3,0.2,0.6]]
+    val_targs = [[0,1,1],[1,0,1],[1,1,1],[1,1,0]]
+    test_preds = [[0.1, 0.2,0.3],[0.3,0.2,0.6],[0.1, 0.2,0.3],[0.3,0.2,0.6]]
+    test_targs = [[0,1,1],[1,0,1],[1,1,1],[1,0,1]]
+
+
+    val_auc_list = []
+    val_f1_list = []
+    val_aupr_list = []
+    val_macro_acc_list = []
+    val_sub_acc_list = []
+
+    test_auc_list = []
+    test_f1_list = []
+    test_aupr_list = []
+    test_macro_acc_list = []
+    test_sub_acc_list = []
+
+    
+    n_bootstraps = 1
+    for i in range(n_bootstraps):
+        
+        val_targs_sub = resample(val_targs, replace=True, n_samples=int(1*len(val_targs)), random_state=np.random.randint(1, 10000))
+        val_preds_sub = resample(val_preds, replace=True, n_samples=int(1*len(val_preds)), random_state=np.random.randint(1, 10000))
+
+        test_targs_sub = resample(test_targs, replace=True, n_samples=int(1*len(test_targs)), random_state=np.random.randint(1, 10000))
+        test_preds_sub = resample(test_preds, replace=True, n_samples=int(1*len(test_preds)), random_state=np.random.randint(1, 10000))
+
+        val_macro_auc, val_f1_score, val_macro_aupr, \
+        test_macro_auc, test_f1, test_macro_aupr, \
+        val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc = all_metric_compute(val_targs_sub, val_preds_sub, test_targs_sub, test_preds_sub, macro_acc_flag=False)
+        
+        val_auc_list.append(val_macro_auc)
+        val_f1_list.append(val_f1_score)
+        val_aupr_list.append(val_macro_aupr)
+        val_macro_acc_list.append(val_macro_acc)
+        val_sub_acc_list.append(val_sub_acc)
+
+        test_auc_list.append(test_macro_auc)
+        test_f1_list.append(test_f1)
+        test_aupr_list.append(test_macro_aupr)
+        test_macro_acc_list.append(test_macro_acc)
+        test_sub_acc_list.append(test_sub_acc)
+
+    print(val_auc_list, val_f1_list, val_aupr_list, val_macro_acc_list, val_sub_acc_list)
+    print(test_auc_list, test_f1_list, test_aupr_list, test_macro_acc_list, test_sub_acc_list)
