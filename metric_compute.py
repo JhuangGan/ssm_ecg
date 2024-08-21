@@ -133,7 +133,7 @@ if __name__ == '__main__':
     test_sub_acc_list = np.array()
 
     
-    n_bootstraps = 1000
+    n_bootstraps = 10
     for i in tqdm(range(n_bootstraps)):
         
         val_targs_sub = resample(val_targs, replace=True, n_samples=int(1*len(val_targs)), random_state=np.random.randint(1, 10000))
@@ -173,4 +173,3 @@ if __name__ == '__main__':
     
     print(val_metric_info_list)
     print(test_metric_info_list)
-    
