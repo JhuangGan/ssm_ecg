@@ -179,7 +179,7 @@ if __name__ == '__main__':
     val_metric_info_list = []
     for i in range(len(val_metric_list)):
         
-        if val_metric_list[i][0].any() == None:
+        if args.macro_acc and i >2:
             pass
         else:
             confidence_intervals = np.percentile(val_metric_list[i], [2.5, 97.5])
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     
     test_metric_info_list = []
     for i in range(len(test_metric_list)):
-        if test_metric_list[i][0].any() == None:
+        if args.macro_acc and i >2:
             pass
         else:
             confidence_intervals = np.percentile(test_metric_list[i], [2.5, 97.5])
