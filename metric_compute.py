@@ -5,7 +5,7 @@ import torch
 from argparse import ArgumentParser
 from sklearn.metrics import roc_auc_score, average_precision_score, accuracy_score
 from sklearn.utils import resample
-
+from tqdm import tqdm
 
 def bestf1score(label, predict):
     precisions, recalls, thresholds = precision_recall_curve(label, predict,)
@@ -134,7 +134,7 @@ if __name__ == '__main__':
 
     
     n_bootstraps = 1000
-    for i in range(n_bootstraps):
+    for i in tqdm(range(n_bootstraps)):
         
         val_targs_sub = resample(val_targs, replace=True, n_samples=int(1*len(val_targs)), random_state=np.random.randint(1, 10000))
         val_preds_sub = resample(val_preds, replace=True, n_samples=int(1*len(val_preds)), random_state=np.random.randint(1, 10000))
