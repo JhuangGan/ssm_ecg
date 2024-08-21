@@ -145,7 +145,7 @@ if __name__ == '__main__':
 
         val_macro_auc, val_f1_score, val_macro_aupr, \
         test_macro_auc, test_f1, test_macro_aupr, \
-        val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc = all_metric_compute(val_targs, val_preds, test_targs_sub, test_preds_sub, macro_acc_flag=args.macro_acc)
+        val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc = all_metric_compute(val_targs_sub, val_preds_sub, test_targs_sub, test_preds_sub, macro_acc_flag=args.macro_acc)
         
         val_auc_list.append(val_macro_auc)
         val_f1_list.append(val_f1_score)
