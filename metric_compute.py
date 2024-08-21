@@ -136,12 +136,14 @@ if __name__ == '__main__':
     
     n_bootstraps = args.n_bootstraps
     for i in tqdm(range(n_bootstraps)):
+
+        print(val_targs.shape)
         
         val_targs_sub = resample(val_targs, replace=True)
         val_preds_sub = resample(val_preds, replace=True)
 
-        test_targs_sub = resample(test_targs, replace=True)
-        test_preds_sub = resample(test_preds, replace=True)
+        test_targs_sub = resample(test_targs, replace=False)
+        test_preds_sub = resample(test_preds, replace=False)
 
         val_macro_auc, val_f1_score, val_macro_aupr, \
         test_macro_auc, test_f1, test_macro_aupr, \
