@@ -18,8 +18,8 @@ def multilabel_f1score(label, predict):
     label = [[label[i][j] for i in range(len(label))] for j in range(len(label[0]))]
     predict = [[predict[i][j] for i in range(len(predict))] for j in range(len(predict[0]))]
     
-    best_f1_score_list = np.array([])
-    threshold_list = np.array([])
+    best_f1_score_list = []
+    threshold_list = []
     for i in range(len(label)):
         best_f1_score, threshold = bestf1score(label[i], predict[i])
         best_f1_score_list.append(best_f1_score)
@@ -81,7 +81,7 @@ def all_metric_compute(val_targs, val_preds, test_targs, test_preds, macro_acc_f
     test_preds = [[test_preds[i][j] for i in range(len(test_preds))] for j in range(len(test_preds[0]))]
     test_targs = [[test_targs[i][j] for i in range(len(test_targs))] for j in range(len(test_targs[0]))]
 
-    test_f1_list = np.array([])
+    test_f1_list = []
     for i in range(len(test_targs)):
         f1 = f1_score(test_targs[i], test_preds[i])
         test_f1_list.append(f1)
@@ -120,17 +120,17 @@ if __name__ == '__main__':
     # test_targs = [[0,1,1],[1,0,1],[1,1,1],[1,0,1]]
 
 
-    val_auc_list = np.array([])
-    val_f1_list = np.array([])
-    val_aupr_list = np.array([])
-    val_macro_acc_list = np.array([])
-    val_sub_acc_list = np.array([])
+    val_auc_list = []
+    val_f1_list = []
+    val_aupr_list = []
+    val_macro_acc_list = []
+    val_sub_acc_list = []
 
-    test_auc_list = np.array([])
-    test_f1_list = np.array([])
-    test_aupr_list = np.array([])
-    test_macro_acc_list = np.array([])
-    test_sub_acc_list = np.array([])
+    test_auc_list = []
+    test_f1_list = []
+    test_aupr_list = []
+    test_macro_acc_list = []
+    test_sub_acc_list = []
 
     
     n_bootstraps = 10
@@ -161,15 +161,16 @@ if __name__ == '__main__':
     val_metric_list = [val_auc_list, val_f1_list, val_aupr_list, val_macro_acc_list, val_sub_acc_list]
     test_metric_list = [test_auc_list, test_f1_list, test_aupr_list, test_macro_acc_list, test_sub_acc_list]
 
-    val_metric_info_list = np.array([])
+    val_metric_info_list = []
     for val_metric in val_metric_list:
         confidence_intervals = np.percentile(val_metric, [2.5, 97.5])
-        val_metric_info_list.append(str(val_metric)+f":{val_metric.mean()}, CI:{confidence_intervals}")
+
+        val_metric_info_list.append(str(val_metric)+f":{np.array(val_metric).mean()}, CI:{confidence_intervals}")
     
-    test_metric_info_list = np.array([])
+    test_metric_info_list = []
     for test_metric in test_metric_list:
         confidence_intervals = np.percentile(test_metric, [2.5, 97.5])
-        test_metric_info_list.append(str(test_metric)+f":{test_metric.mean()}, CI:{confidence_intervals}")
+        test_metric_info_list.append(str(test_metric)+f":{np.array(test_metric).mean()}, CI:{confidence_intervals}")
     
     print(val_metric_info_list)
     print(test_metric_info_list)
