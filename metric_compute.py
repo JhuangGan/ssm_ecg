@@ -103,7 +103,8 @@ if __name__ == '__main__':
     parser.add_argument("--preds_targs_path", type=str, default='')
     parser.add_argument("--info", type=str, default='')
     parser.add_argument("--macro_acc", action="store_true", default=False)
-    parser.add_argument("--n_bootstraps", type=int, default=1000)
+    parser.add_argument("--n_bootstraps", type=int, default=100)
+
 
     args = parser.parse_args()
 
