@@ -29,7 +29,7 @@ def multilabel_f1score(label, predict):
     return macro_best_f1_score, threshold_list
 
 
-def macro_acc_and_subsample_acc(true, pred):
+def macro_acc_and_subsample_acc(true, pred, thresholds_list):
 
     sub_acc = sum([pred[i]==true[i] for i in range(len(pred))])/len(pred)
 
@@ -40,6 +40,8 @@ def macro_acc_and_subsample_acc(true, pred):
 
     pred_unzip = [row[i] for row in pred for i in range(len(pred[0]))]
     true_unzip = [row[i] for row in true for i in range(len(true[0]))]
+
+    pred_unzip = [[1 if pred > thresh else 0 for pred, thresh in zip(pred_row, thresholds_list)] for pred_row in pred_unzip]
 
     macro_acc = accuracy_score(true_unzip, pred_unzip)
     # print(macro_acc)
@@ -59,11 +61,11 @@ if __name__ == '__main__':
     preds = dic['preds']
     targs = dic['targs']
 
-    if args.macro_acc:
-        val_sub_acc, val_macro_acc = macro_acc_and_subsample_acc(targs, preds)
-        print(f"val_macro_acc:{val_macro_acc}, val_sub_acc:{val_sub_acc}")
-
     macro_best_f1_score, thresholds_list = multilabel_f1score(targs, preds)
+
+    if args.macro_acc:
+        val_sub_acc, val_macro_acc = macro_acc_and_subsample_acc(targs, preds, thresholds_list)
+        print(f"val_macro_acc:{val_macro_acc}, val_sub_acc:{val_sub_acc}")
 
     macro_auc = np.round(roc_auc_score(targs, preds, average='macro'), 5)
     macro_aupr = np.round(average_precision_score(targs, preds, average='macro'), 5)
