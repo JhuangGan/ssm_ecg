@@ -51,7 +51,7 @@ def macro_acc_and_subsample_acc(true, pred):
 
 def all_metric_compute(val_targs, val_preds, test_targs, test_preds, macro_acc_flag=False):
 
-    val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc = None, None, None, None
+    val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc = -1,-1,-1,-1
 
     val_macro_auc = np.round(roc_auc_score(val_targs, val_preds, average='macro'), 5)
     val_macro_aupr = np.round(average_precision_score(val_targs, val_preds, average='macro'), 5)
@@ -179,7 +179,7 @@ if __name__ == '__main__':
     val_metric_info_list = []
     for i in range(len(val_metric_list)):
         
-        if args.macro_acc and (int(i)>1):
+        if val_metric_list[i][0] == -1:
             pass
         else:
             confidence_intervals = np.percentile(val_metric_list[i], [2.5, 97.5])
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     
     test_metric_info_list = []
     for i in range(len(test_metric_list)):
-        if args.macro_acc and (int(i)>1):
+        if test_metric_list[i][0] == -1:
             pass
         else:
             confidence_intervals = np.percentile(test_metric_list[i], [2.5, 97.5])
