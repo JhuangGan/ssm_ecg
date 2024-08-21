@@ -158,7 +158,19 @@ if __name__ == '__main__':
         test_macro_acc_list.append(test_macro_acc)
         test_sub_acc_list.append(test_sub_acc)
 
+    val_metric_list = [val_auc_list, val_f1_list, val_aupr_list, val_macro_acc_list, val_sub_acc_list]
+    test_metric_list = [test_auc_list, test_f1_list, test_aupr_list, test_macro_acc_list, test_sub_acc_list]
 
-
-    print(val_auc_list.mean(), val_f1_list.mean(), val_aupr_list.mean(), val_macro_acc_list.mean(), val_sub_acc_list.mean())
-    print(test_auc_list.mean(), test_f1_list.mean(), test_aupr_list.mean(), test_macro_acc_list.mean(), test_sub_acc_list.mean())
+    val_metric_info_list = np.array()
+    for val_metric in val_metric_list:
+        confidence_intervals = np.percentile(val_metric, [2.5, 97.5])
+        val_metric_info_list.append(str(val_metric)+f":{val_metric.mean()}, CI:{confidence_intervals}")
+    
+    test_metric_info_list = np.array()
+    for test_metric in test_metric_list:
+        confidence_intervals = np.percentile(test_metric, [2.5, 97.5])
+        test_metric_info_list.append(str(test_metric)+f":{test_metric.mean()}, CI:{confidence_intervals}")
+    
+    print(val_metric_info_list)
+    print(test_metric_info_list)
+    
