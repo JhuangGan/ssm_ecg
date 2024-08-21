@@ -103,6 +103,7 @@ if __name__ == '__main__':
     parser.add_argument("--preds_targs_path", type=str, default='')
     parser.add_argument("--info", type=str, default='')
     parser.add_argument("--macro_acc", action="store_true", default=False)
+    parser.add_argument("--n_bootstraps", type=int, default=1000)
 
     args = parser.parse_args()
 
@@ -133,7 +134,7 @@ if __name__ == '__main__':
     test_sub_acc_list = []
 
     
-    n_bootstraps = 10
+    n_bootstraps = args.n_bootstraps
     for i in tqdm(range(n_bootstraps)):
         
         val_targs_sub = resample(val_targs, replace=True, n_samples=int(1*len(val_targs)), random_state=np.random.randint(1, 10000))
