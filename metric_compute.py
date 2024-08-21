@@ -139,11 +139,11 @@ if __name__ == '__main__':
 
         print(val_targs.shape)
         
-        val_targs_sub = resample(val_targs, replace=True)
-        val_preds_sub = resample(val_preds, replace=True)
+        val_targs_sub = resample(val_targs, replace=True, n_samples=int(0.8*len(val_targs)), random_state=np.random.randint(1, 10000))
+        val_preds_sub = resample(val_preds, replace=True, n_samples=int(0.8*len(val_preds)), random_state=np.random.randint(1, 10000))
 
-        test_targs_sub = resample(test_targs, replace=False)
-        test_preds_sub = resample(test_preds, replace=False)
+        test_targs_sub = resample(test_targs, replace=True, n_samples=int(0.8*len(test_targs)), random_state=np.random.randint(1, 10000))
+        test_preds_sub = resample(test_preds, replace=True, n_samples=int(0.8*len(test_preds)), random_state=np.random.randint(1, 10000))
 
         val_macro_auc, val_f1_score, val_macro_aupr, \
         test_macro_auc, test_f1, test_macro_aupr, \
