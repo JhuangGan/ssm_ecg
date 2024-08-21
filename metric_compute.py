@@ -138,11 +138,12 @@ if __name__ == '__main__':
     for i in tqdm(range(n_bootstraps)): 
 
         val_preds_targs = [[val_preds[i], val_targs[i]] for i in range(len(val_preds))]
-        
+        print(val_preds_targs[0])
         val_preds_targs_sub = resample(val_preds_targs, replace=True, n_samples=int(1*len(val_preds_targs)), random_state=np.random.randint(1, 10000))
 
         val_targs_sub = [row[0] for row in val_preds_targs]
         val_preds_sub = [row[1] for row in val_preds_targs]
+        print(print(val_targs_sub[0]))
 
         test_preds_targs = [[test_preds[i], test_targs[i]] for i in range(len(test_preds))]
         
@@ -150,7 +151,7 @@ if __name__ == '__main__':
 
         test_targs_sub = [row[0] for row in test_preds_targs]
         test_preds_sub = [row[1] for row in test_preds_targs]
-        
+
 
         val_macro_auc, val_f1_score, val_macro_aupr, \
         test_macro_auc, test_f1, test_macro_aupr, \
