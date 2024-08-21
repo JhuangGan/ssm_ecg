@@ -159,22 +159,24 @@ if __name__ == '__main__':
         test_macro_acc_list.append(test_macro_acc)
         test_sub_acc_list.append(test_sub_acc)
 
-    val_metric_list = [val_auc_list, val_f1_list, val_aupr_list, val_macro_acc_list, val_sub_acc_list]
-    test_metric_list = [test_auc_list, test_f1_list, test_aupr_list, test_macro_acc_list, test_sub_acc_list]
+    # val_metric_list = [val_auc_list, val_f1_list, val_aupr_list, val_macro_acc_list, val_sub_acc_list]
+    # test_metric_list = [test_auc_list, test_f1_list, test_aupr_list, test_macro_acc_list, test_sub_acc_list]
 
-    val_name = ['val_auc_list', 'val_f1_list', 'val_aupr_list', 'val_macro_acc_list', 'val_sub_acc_list']
-    test_name = ['test_auc_list', 'test_f1_list', 'test_aupr_list', 'test_macro_acc_list', 'test_sub_acc_list']
+    # val_name = ['val_auc_list', 'val_f1_list', 'val_aupr_list', 'val_macro_acc_list', 'val_sub_acc_list']
+    # test_name = ['test_auc_list', 'test_f1_list', 'test_aupr_list', 'test_macro_acc_list', 'test_sub_acc_list']
 
-    val_metric_info_list = []
-    for i in range(len(val_metric_list)):
-        confidence_intervals = np.percentile(val_metric_list[i], [2.5, 97.5])
+    # val_metric_info_list = []
+    # for i in range(len(val_metric_list)):
+    #     confidence_intervals = np.percentile(val_metric_list[i], [2.5, 97.5])
 
-        val_metric_info_list.append(val_name[i]+f":{np.array(val_metric_list[i]).mean()}, CI:{confidence_intervals}")
+    #     val_metric_info_list.append(val_name[i]+f":{np.array(val_metric_list[i]).mean()}, CI:{confidence_intervals}")
     
-    test_metric_info_list = []
-    for i in range(len(test_metric_list)):
-        confidence_intervals = np.percentile(test_metric_list[i], [2.5, 97.5])
-        test_metric_info_list.append(test_name[i]+f":{np.array(test_metric_list[i]).mean()}, CI:{confidence_intervals}")
+    # test_metric_info_list = []
+    # for i in range(len(test_metric_list)):
+    #     confidence_intervals = np.percentile(test_metric_list[i], [2.5, 97.5])
+    #     test_metric_info_list.append(test_name[i]+f":{np.array(test_metric_list[i]).mean()}, CI:{confidence_intervals}")
     
-    print(val_metric_info_list)
-    print(test_metric_info_list)
+    # print(val_metric_info_list)
+    # print(test_metric_info_list)
+    confidence_intervals = np.percentile(val_auc_list, [2.5, 97.5])
+    print(f":{np.array(val_auc_list).mean()}, CI:{confidence_intervals}")
