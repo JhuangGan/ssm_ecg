@@ -140,12 +140,12 @@ if __name__ == '__main__':
         val_preds_targs = [[val_preds[i], val_targs[i]] for i in range(len(val_preds))]
         
         val_preds_targs_sub = resample(val_preds_targs, replace=True, n_samples=int(1*len(val_preds_targs)), random_state=np.random.randint(1, 10000))
-        print(np.array(val_preds_targs).shape)
+        # print(np.array(val_preds_targs).shape)
         val_targs_sub = [row[0] for row in val_preds_targs]
         val_preds_sub = [row[1] for row in val_preds_targs]
-        print(np.array(val_targs_sub).shape)
+        # print(np.array(val_targs_sub).shape)
 
-        test_preds_targs = [[test_preds[i], test_targs[i]] for i in range(len(test_preds))]
+        test_preds_targs = [[test_targs[i], test_preds[i]] for i in range(len(test_preds))]
         
         test_preds_targs_sub = resample(test_preds_targs, replace=True, n_samples=int(1*len(test_preds_targs)), random_state=np.random.randint(1, 10000))
 
@@ -155,7 +155,7 @@ if __name__ == '__main__':
 
         val_macro_auc, val_f1_score, val_macro_aupr, \
         test_macro_auc, test_f1, test_macro_aupr, \
-        val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc = all_metric_compute(val_targs, val_preds, test_targs, test_preds, macro_acc_flag=args.macro_acc)
+        val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc = all_metric_compute(val_targs_sub, val_preds_sub, test_targs_sub, test_preds_sub, macro_acc_flag=args.macro_acc)
         
         val_auc_list.append(val_macro_auc)
         val_f1_list.append(val_f1_score)
