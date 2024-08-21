@@ -142,16 +142,16 @@ if __name__ == '__main__':
         
         val_preds_targs_sub = resample(val_preds_targs, replace=True, n_samples=int(1*len(val_preds_targs)), random_state=np.random.randint(1, 10000))
         # print(np.array(val_preds_targs).shape)
-        val_targs_sub = [row[0] for row in val_preds_targs]
-        val_preds_sub = [row[1] for row in val_preds_targs]
+        val_targs_sub = [row[0] for row in val_preds_targs_sub]
+        val_preds_sub = [row[1] for row in val_preds_targs_sub]
         # print(np.array(val_targs_sub).shape)
 
         test_preds_targs = [[test_targs[i], test_preds[i]] for i in range(len(test_preds))]
         
         test_preds_targs_sub = resample(test_preds_targs, replace=True, n_samples=int(1*len(test_preds_targs)), random_state=np.random.randint(1, 10000))
 
-        test_targs_sub = [row[0] for row in test_preds_targs]
-        test_preds_sub = [row[1] for row in test_preds_targs]
+        test_targs_sub = [row[0] for row in test_preds_targs_sub]
+        test_preds_sub = [row[1] for row in test_preds_targs_sub]
 
 
         val_macro_auc, val_f1_score, val_macro_aupr, \
