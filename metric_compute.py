@@ -136,14 +136,21 @@ if __name__ == '__main__':
     
     n_bootstraps = args.n_bootstraps
     for i in tqdm(range(n_bootstraps)): 
-        print(val_preds[0])    
-        val_targs_sub = resample(val_targs, replace=True, n_samples=int(1*len(val_targs)), random_state=np.random.randint(1, 10000))
-        val_preds_sub = resample(val_preds, replace=True, n_samples=int(1*len(val_preds)), random_state=np.random.randint(1, 10000))
 
-        print(val_preds_sub[0])
+        val_preds_targs = [[val_preds[i], val_targs[i]] for i in range(len(val_preds))]
+        
+        val_preds_targs_sub = resample(val_preds_targs, replace=True, n_samples=int(1*len(val_preds_targs)), random_state=np.random.randint(1, 10000))
 
-        test_targs_sub = resample(test_targs, replace=True, n_samples=int(1*len(test_targs)), random_state=np.random.randint(1, 10000))
-        test_preds_sub = resample(test_preds, replace=True, n_samples=int(1*len(test_preds)), random_state=np.random.randint(1, 10000))
+        val_targs_sub = [row[0] for row in val_preds_targs]
+        val_preds_sub = [row[1] for row in val_preds_targs]
+
+        test_preds_targs = [[test_preds[i], test_targs[i]] for i in range(len(test_preds))]
+        
+        test_preds_targs_sub = resample(test_preds_targs, replace=True, n_samples=int(1*len(test_preds_targs)), random_state=np.random.randint(1, 10000))
+
+        test_targs_sub = [row[0] for row in test_preds_targs]
+        test_preds_sub = [row[1] for row in test_preds_targs]
+        
 
         val_macro_auc, val_f1_score, val_macro_aupr, \
         test_macro_auc, test_f1, test_macro_aupr, \
