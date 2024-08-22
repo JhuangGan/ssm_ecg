@@ -16,7 +16,7 @@ n_select = 9
 label_list = []
 
 for i in range(len(test_targs)):
-    if sum(test_targs) >= n_select:
+    if sum(test_targs[i]) >= n_select:
         label_list.append(i)
 
 select_preds = []
