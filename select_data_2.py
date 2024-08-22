@@ -15,6 +15,6 @@ def select(filename, n_select):
 
     torch.save(test_dic, './'+filename+'_select_'+str(n_select)+'_.pth')
 
-filename1 = "test_ptb_xl_fs100_250_label_allpreds_targs"
+filename1 = "ptb_xl_fs100_250_label_allpreds_targs"
 select(filename1, n_select=9)
 
