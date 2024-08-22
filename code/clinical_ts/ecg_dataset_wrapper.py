@@ -190,7 +190,8 @@ class ECGDataSetWrapper(object):
         if "ptb" in str(target_folder):
             label = self.label  # just possible for ptb xl
             self.lbl_itos = np.array(lbl_itos[label])
-            label = label + "_filtered_numeric"
+            # label = label + "_filtered_numeric"
+            label = label + "_numeric"
             df_mapped["label"] = df_mapped[label].apply(
                 lambda x: multihot_encode(x, len(self.lbl_itos)))
         elif 'sph' in str(target_folder):
