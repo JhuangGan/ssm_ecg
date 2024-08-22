@@ -26,4 +26,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     select(args.test_file, n_select=args.n_select)
 
-    select(args.val_filename1, n_select=args.n_select)
+    select(args.val_file, n_select=args.n_select)
