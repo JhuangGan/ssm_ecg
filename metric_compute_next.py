@@ -46,15 +46,16 @@ def multilabel_f1score(label, predict, label_test, predict_test):
 
 if __name__ == '__main__':
     parser = ArgumentParser(add_help=False)
-    parser.add_argument("--preds_targs_path", type=str, default='')
+    parser.add_argument("--val_preds_targs_path", type=str, default='')
     # parser.add_argument("--info", type=str, default='')
+    parser.add_argument("--test_preds_targs_path", type=str, default='')
 
     args = parser.parse_args()
 
-    val_dic = torch.load('./val_'+str(args.preds_targs_path)+'.pth')
+    val_dic = torch.load('./'+str(args.preds_targs_path)+'.pth')
     val_preds = val_dic['preds']
     val_targs = val_dic['targs']
-    test_dic = torch.load('./test_'+str(args.preds_targs_path)+'.pth')
+    test_dic = torch.load('./'+str(args.preds_targs_path)+'.pth')
     test_preds = test_dic['preds']
     test_targs = test_dic['targs']
 
