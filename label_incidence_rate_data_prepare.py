@@ -28,5 +28,6 @@ if __name__ == '__main__':
                                                                             target_folder=target_folder_ptb_xl, recreate_data=True)
         reformat_as_memmap(df_ptb_xl, target_folder_ptb_xl/("memmap.npy"),data_folder=target_folder_ptb_xl,delete_npys=False)
 
-    data_prepare(target_fs=100)
+    
     data_prepare(target_fs=500)
+    data_prepare(target_fs=100)
