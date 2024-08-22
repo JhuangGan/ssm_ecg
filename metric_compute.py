@@ -100,19 +100,21 @@ def all_metric_compute(val_targs, val_preds, test_targs, test_preds, macro_acc_f
 
 if __name__ == '__main__':
     parser = ArgumentParser(add_help=False)
-    parser.add_argument("--preds_targs_path", type=str, default='')
+    parser.add_argument("--val_preds_targs_path", type=str, default='')
+    parser.add_argument("--test_preds_targs_path", type=str, default='')
+
     parser.add_argument("--info", type=str, default='')
     parser.add_argument("--macro_acc", action="store_true", default=False)
-    parser.add_argument("--n_bootstraps", type=int, default=1000)
+    parser.add_argument("--n_bootstraps", type=int, default=1)
 
 
     args = parser.parse_args()
 
-    val_dic = torch.load('./val_'+str(args.preds_targs_path)+'.pth')
+    val_dic = torch.load('./'+str(args.val_preds_targs_path)+'.pth')
     val_preds = val_dic['preds']
     val_targs = val_dic['targs']
 
-    test_dic = torch.load('./test_'+str(args.preds_targs_path)+'.pth')
+    test_dic = torch.load('./'+str(args.test_preds_targs_path)+'.pth')
     test_preds = test_dic['preds']
     test_targs = test_dic['targs']
 
