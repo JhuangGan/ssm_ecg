@@ -15,7 +15,7 @@ def select(filename, n_select):
     test_dic['preds'] = test_preds
     test_dic['targs'] = test_targs
 
-    torch.save(test_dic, './'+filename+'_select_'+str(n_select)+'_.pth')
+    torch.save(test_dic, './'+filename+'_select_'+str(n_select)+'.pth')
 
 if __name__ == '__main__':
     parser = ArgumentParser(add_help=False)

@@ -76,7 +76,6 @@ def all_metric_compute(val_targs, val_preds, test_targs, test_preds, macro_acc_f
         test_sub_acc, test_macro_acc = macro_acc_and_subsample_acc(test_targs, test_preds)
         # print(f"test_macro_acc:{test_macro_acc}, test_sub_acc:{test_sub_acc}")
 
-
     test_preds = [[test_preds[i][j] for i in range(len(test_preds))] for j in range(len(test_preds[0]))]
     test_targs = [[test_targs[i][j] for i in range(len(test_targs))] for j in range(len(test_targs[0]))]
 
@@ -87,7 +86,6 @@ def all_metric_compute(val_targs, val_preds, test_targs, test_preds, macro_acc_f
     
     test_f1 = sum(test_f1_list)/len(test_f1_list)
 
-    
     return val_macro_auc, val_macro_best_f1_score, val_macro_aupr, test_macro_auc, test_f1, test_macro_aupr, val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc
     
 
