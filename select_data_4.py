@@ -3,19 +3,19 @@ import numpy as np
 from argparse import ArgumentParser
 
 def select(filename, n_select):
-    test_dic = torch.load('./'+str(filename)+'.pth')
-    test_preds = np.array(test_dic['preds'])
-    test_targs = np.array(test_dic['targs'])
+    dic = torch.load('./'+str(filename)+'.pth')
+    preds = np.array(dic['preds'])
+    targs = np.array(dic['targs'])
 
 
-    test_preds = test_preds[:, test_dic['targs'].sum(axis=0)>=n_select]
-    test_targs = test_targs[:, test_dic['targs'].sum(axis=0)>=n_select]
+    preds = preds[:, dic['targs'].sum(axis=0)>=n_select]
+    targs = targs[:, dic['targs'].sum(axis=0)>=n_select]
 
 
-    test_dic['preds'] = test_preds
-    test_dic['targs'] = test_targs
+    dic['preds'] = preds
+    dic['targs'] = targs
 
-    torch.save(test_dic, './'+filename+'_select_'+str(n_select)+'.pth')
+    torch.save(dic, './'+filename+'_select_'+str(n_select)+'.pth')
 
 if __name__ == '__main__':
     parser = ArgumentParser(add_help=False)
