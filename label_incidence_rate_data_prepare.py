@@ -21,7 +21,7 @@ if __name__ == '__main__':
             os.makedirs(target_root)
         
         data_folder_ptb_xl = data_root/"ptb_xl/" # 数据存放文件夹
-        target_folder_ptb_xl = target_root/("ptb_xl_fs"+str(target_fs)+"0p5")  # 
+        target_folder_ptb_xl = target_root/("ptb_xl_fs"+str(target_fs)+"_0p5")  # min_cnt = 110 = 21837*0.5%
         
         df_ptb_xl, lbl_itos_ptb_xl,  mean_ptb_xl, std_ptb_xl = prepare_data_ptb_xl(data_folder_ptb_xl, min_cnt=110, target_fs=target_fs, 
                                                                             channels=12, channel_stoi=channel_stoi_default, 
