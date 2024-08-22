@@ -12,9 +12,6 @@ def bestf1score(label, predict):
     return best_f1_score, thresholds[best_f1_score_index]
 
 def multilabel_f1score(label, predict):
-    label = [[label[i][j] for i in range(len(label))] for j in range(len(label[0]))]
-    predict = [[predict[i][j] for i in range(len(predict))] for j in range(len(predict[0]))]
-
     best_f1_score_list = []
     threshold_list = []
     for i in range(len(label)):
@@ -50,6 +47,12 @@ if __name__ == '__main__':
     val_macro_auc = np.round(roc_auc_score(val_targs, val_preds, average='macro'), 5)
     val_macro_aupr = np.round(average_precision_score(val_targs, val_preds, average='macro'), 5)
 
-    
+    print(val_preds.shape)
+    print(val_targs.shape)
+
+    print(test_preds.shape)
+    print(test_targs.shape)
+
+
 
     
