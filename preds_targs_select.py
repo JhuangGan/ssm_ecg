@@ -32,7 +32,7 @@ select_targs = [[select_targs[i][j] for i in range(len(select_targs))] for j in 
 test_dic['preds'] = select_preds
 test_dic['targs'] = select_targs
 
-torch.save(test_dic, './test_ptb_xl_fs100_250_label_allpreds_targs_select_'+str(n_select))
+torch.save(test_dic, './test_ptb_xl_fs100_250_label_allpreds_targs_select_'+str(n_select)+'.pth')
 
 
 
