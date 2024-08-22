@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+from argparse import ArgumentParser
 
 def select(filename, n_select):
     test_dic = torch.load('./'+str(filename)+'.pth')
@@ -16,6 +17,12 @@ def select(filename, n_select):
 
     torch.save(test_dic, './'+filename+'_select_'+str(n_select)+'_.pth')
 
-filename1 = "test_ptb_xl_fs100_250_label_allpreds_targs"
-select(filename1, n_select=9)
+if __name__ == '__main__':
+    parser = ArgumentParser(add_help=False)
+    parser.add_argument("--n_select", type=int, default=9)
+    parser.add_argument("--test_file", type=int, default=9)
+
+    args = parser.parse_args()
+    filename1 = args.test_file
+    select(filename1, n_select=args.n_select)
 
