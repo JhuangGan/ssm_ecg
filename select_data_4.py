@@ -20,7 +20,7 @@ def select(filename, n_select):
 if __name__ == '__main__':
     parser = ArgumentParser(add_help=False)
     parser.add_argument("--n_select", type=int, default=9)
-    parser.add_argument("--test_file", type=str, default=9)
+    parser.add_argument("--test_file", type=str, default='')
 
     args = parser.parse_args()
     filename1 = args.test_file

@@ -65,8 +65,6 @@ def all_metric_compute(val_targs, val_preds, test_targs, test_preds, macro_acc_f
         val_sub_acc, val_macro_acc = macro_acc_and_subsample_acc(val_targs, val_preds)
         # print(f"val_macro_acc:{val_macro_acc}, val_sub_acc:{val_sub_acc}")
 
-
-
     test_macro_auc = np.round(roc_auc_score(test_targs, test_preds, average='macro'), 5)
     test_macro_aupr = np.round(average_precision_score(test_targs, test_preds, average='macro'), 5)
 
@@ -91,11 +89,6 @@ def all_metric_compute(val_targs, val_preds, test_targs, test_preds, macro_acc_f
     
     return val_macro_auc, val_macro_best_f1_score, val_macro_aupr, test_macro_auc, test_f1, test_macro_aupr, val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc
     
-
-
-
-
-
 
 
 if __name__ == '__main__':
