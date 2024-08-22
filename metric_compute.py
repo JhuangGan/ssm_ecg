@@ -179,19 +179,19 @@ if __name__ == '__main__':
     val_metric_info_list = []
     for i in range(len(val_metric_list)):
         
-        if any(val_metric_list[i][0]) == -1:
-            pass
-        else:
-            confidence_intervals = np.percentile(val_metric_list[i], [2.5, 97.5])
-            val_metric_info_list.append(val_name[i]+f":{np.array(val_metric_list[i]).mean()}, CI:{confidence_intervals}")
+        # if any(val_metric_list[i][0]) == -1:
+        #     pass
+        # else:
+        confidence_intervals = np.percentile(val_metric_list[i], [2.5, 97.5])
+        val_metric_info_list.append(val_name[i]+f":{np.array(val_metric_list[i]).mean()}, CI:{confidence_intervals}")
     
     test_metric_info_list = []
     for i in range(len(test_metric_list)):
-        if any(test_metric_list[i][0]) == -1:
-            pass
-        else:
-            confidence_intervals = np.percentile(test_metric_list[i], [2.5, 97.5])
-            test_metric_info_list.append(test_name[i]+f":{np.array(test_metric_list[i]).mean()}, CI:{confidence_intervals}")
+        # if any(test_metric_list[i][0]) == -1:
+        #     pass
+        # else:
+        confidence_intervals = np.percentile(test_metric_list[i], [2.5, 97.5])
+        test_metric_info_list.append(test_name[i]+f":{np.array(test_metric_list[i]).mean()}, CI:{confidence_intervals}")
     
     print(val_metric_info_list)
     print(test_metric_info_list)
