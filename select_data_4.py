@@ -1,3 +1,6 @@
+# 筛选发生个数超过9的label，然后看结果，示例如下：
+# python select_data_4.py --n_select 9 --test_file test_ptb_xl_fs500_250_label_allpreds_targs --val_file val_ptb_xl_fs500_250_label_allpreds_targs 
+
 import torch
 import numpy as np
 from argparse import ArgumentParser
