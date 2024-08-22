@@ -1,7 +1,7 @@
 # 挑出71分类里的测试集中样本量大于等于9的诊断的指标
 import torch
 
-filename = "ptb_xl_fs100_250_label_allpreds_targs"
+filename = "ptb_xl_fs500_250_label_allpreds_targs"
 
 test_dic = torch.load('./test_'+str(filename)+'.pth')
 test_preds = test_dic['preds']

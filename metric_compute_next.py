@@ -52,10 +52,10 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    val_dic = torch.load('./'+str(args.preds_targs_path)+'.pth')
+    val_dic = torch.load('./'+str(args.val_preds_targs_path)+'.pth')
     val_preds = val_dic['preds']
     val_targs = val_dic['targs']
-    test_dic = torch.load('./'+str(args.preds_targs_path)+'.pth')
+    test_dic = torch.load('./'+str(args.test_preds_targs_path)+'.pth')
     test_preds = test_dic['preds']
     test_targs = test_dic['targs']
 
