@@ -24,7 +24,7 @@ select_targs = []
 
 for i in label_list:
     select_preds.append(test_preds)
-    select_targs.appedn(test_targs)
+    select_targs.append(test_targs)
 
 select_preds = [[select_preds[i][j] for i in range(len(select_preds))] for j in range(len(test_preds[0]))]
 select_targs = [[select_targs[i][j] for i in range(len(select_targs))] for j in range(len(test_targs[0]))]
