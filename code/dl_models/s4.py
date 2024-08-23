@@ -1115,10 +1115,11 @@ class S4(nn.Module):
 
         # Convolution
         if self.bidirectional:
-            k0, k1 = rearrange(k, '(s c) h l -> s c h l', s=2)
+            k0, k1 = rearrange(k, '(s c) h l -> s c h l', s=2)  ## 分两半，因为前面channel=2，并翻转后一半
             k = F.pad(k0, (0, L)) \
                 + F.pad(k1.flip(-1), (L, 0)) \
-
+        
+        # 快速傅里叶变换
         k_f = torch.fft.rfft(k, n=2*L)  # (C H L)
         u_f = torch.fft.rfft(u, n=2*L)  # (B H L)
         # k_f.unsqueeze(-4) * u_f.unsqueeze(-3) # (B C H L)
