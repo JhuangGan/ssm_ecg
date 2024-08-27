@@ -137,13 +137,13 @@ class ECGDataSetWrapper(object):
         return train_loader, valid_loader
 
     def get_training_params(self):
-        chunkify_train = False
-        chunkify_valid = True
+        chunkify_train = False  ## 训练时不切块
+        chunkify_valid = True   ## 验证时切
         chunk_length_train = self.input_size  # target_fs*6
         chunk_length_valid = self.input_size
         min_chunk_length = self.input_size  # chunk_length
         stride_length_train = chunk_length_train//4  # chunk_length_train//8
-        stride_length_valid = self.val_stride if self.val_stride is not None else self.input_size #//2  # chunk_length_valid
+        stride_length_valid = self.val_stride if self.val_stride is not None else self.input_size #//2  # chunk_length_valid == input_size
 
         copies_valid = 0  # >0 should only be used with chunkify_valid=False
         return chunkify_train, chunkify_valid, chunk_length_train, chunk_length_valid, min_chunk_length, stride_length_train, stride_length_valid, copies_valid

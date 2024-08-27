@@ -996,7 +996,7 @@ class HippoSSKernel(nn.Module):
             math.log(dt_max) - math.log(dt_min)
         ) + math.log(dt_min)
 
-        w, p, B, _ = nplr(measure, self.N, rank, dtype=dtype)
+        w, p, B, _ = nplr(measure, self.N, rank, dtype=dtype)  
         C = torch.randn(channels, self.H, self.N // 2, dtype=cdtype)
         self.kernel = SSKernelNPLR(
             L, w, p, B, C,
@@ -1107,8 +1107,8 @@ class S4(nn.Module):
         Returns: same shape as u
         """
         if not self.transposed:
-            u = u.transpose(-1, -2)
-        L = u.size(-1)
+            u = u.transpose(-1, -2)  ## 将最后一个和倒数第二个维度的位置互换
+        L = u.size(-1)  ## 将最后一个维度大小，赋值为L
 
         # Compute SS Kernel
         k = self.kernel(L=L, rate=rate)  # (C H L) (B C H L)

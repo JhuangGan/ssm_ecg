@@ -483,7 +483,7 @@ class TimeseriesDatasetCrops(torch.utils.data.Dataset):
             timesteps= self.get_sample_length(idx)
 
             if(self.random_crop):#random crop
-                if(timesteps==self.output_size):
+                if(timesteps==self.output_size):  ## 因为训练时，timestepps为datalength，所以将进入else，随机裁剪，而val和test相等，则不会随机剪裁
                     start_idx_rel = 0
                 else:
                     start_idx_rel = random.randint(0, timesteps - self.output_size -1)#np.random.randint(0, timesteps - self.output_size)
