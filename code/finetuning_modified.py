@@ -469,7 +469,7 @@ def load_model(linear_evaluation, num_classes, use_pretrained, discriminative_lr
             else:
                 print("load already finetuned model")
                 model_state_dict = lightning_state_dict
-            print(model_state_dict)
+            print(model_state_dict)  ### 增加
             model.load_state_dict(model_state_dict)
         else:
             model = ResNetSimCLR(base_model, num_classes,
