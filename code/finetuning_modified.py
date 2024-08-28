@@ -462,9 +462,9 @@ def load_model(linear_evaluation, num_classes, use_pretrained, discriminative_lr
             model = CPCModel(input_channels=12, num_classes=num_classes, strides=strides,
                              kss=kss,features=features, mlp=True, bn_encoder=True,
                              lin_ftrs_head=lin_ftrs_head, s4=True,bn_head=bn_head, 
-                             ps_head=ps_head, s4_d_model=512, s4_d_state=8, s4_l_max= 1250,
+                             ps_head=ps_head, s4_d_model=512, s4_d_state=8, s4_l_max= 2048,
                              concat_pooling=False, use_meta_information_in_head=use_meta_information_in_head).to(device)
-            # 将s4_l_max=1024 改大一些 改为input_size应该就可以了。直接改为8198？
+            # 将s4_l_max=1024 改大一些 改为input_size应该就可以了。直接改为2048？
 
             if "state_dict" in lightning_state_dict.keys():
                 print("load pretrained model")
