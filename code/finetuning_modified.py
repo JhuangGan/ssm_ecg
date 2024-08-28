@@ -325,9 +325,9 @@ def configure_optimizer(model, batch_size, head_only=False, lr=None, discriminat
 def load_model(linear_evaluation, num_classes, use_pretrained, discriminative_lr=False, hidden=False, conv_encoder=False, bn_head=False, ps_head=0.5,
                location="./checkpoints/moco_baselinewonder200.ckpt", method="simclr",
                base_model="xresnet1d50", out_dim=71, widen=1, n_hidden=512, 
-               input_size=1024,
+               # input_size=1024,
                use_meta_information_in_head=False):
-    # 加入参数 input_size
+    # 加入参数 input_size，算了，删了
     discriminative_lr_factor = 1
     
     def tlenet():
@@ -462,9 +462,9 @@ def load_model(linear_evaluation, num_classes, use_pretrained, discriminative_lr
             model = CPCModel(input_channels=12, num_classes=num_classes, strides=strides,
                              kss=kss,features=features, mlp=True, bn_encoder=True,
                              lin_ftrs_head=lin_ftrs_head, s4=True,bn_head=bn_head, 
-                             ps_head=ps_head, s4_d_model=512, s4_d_state=8, s4_l_max= input_size,
+                             ps_head=ps_head, s4_d_model=512, s4_d_state=8, s4_l_max= 16000,
                              concat_pooling=False, use_meta_information_in_head=use_meta_information_in_head).to(device)
-            # 将s4_l_max=1024 改大一些 改为input_size应该就可以了。
+            # 将s4_l_max=1024 改大一些 改为input_size应该就可以了。直接改为16000
 
             if "state_dict" in lightning_state_dict.keys():
                 print("load pretrained model")
@@ -473,7 +473,7 @@ def load_model(linear_evaluation, num_classes, use_pretrained, discriminative_lr
             else:
                 print("load already finetuned model")
                 model_state_dict = lightning_state_dict
-            print(model_state_dict)  ### 增加
+            # print(model_state_dict)  ### 增加
             model.load_state_dict(model_state_dict)
         else:
             model = ResNetSimCLR(base_model, num_classes,
@@ -1051,8 +1051,8 @@ def run():
         args.linear_evaluation, num_classes, args.use_pretrained or args.load_finetuned, hidden=args.hidden,
         location=args.model_file, discriminative_lr=args.discriminative_lr, method=args.method, base_model=args.base_model,
         bn_head=args.bn_head, ps_head=args.ps_head, out_dim=args.num_classes, n_hidden=args.n_hidden, 
-        conv_encoder=args.conv_encoder, use_meta_information_in_head=args.use_meta_information_in_head, input_size=args.input_size)
-    # 加入input_size参数，
+        conv_encoder=args.conv_encoder, use_meta_information_in_head=args.use_meta_information_in_head)
+    # 加入input_size参数，赋值给CPC的s4_l_max，不加直接赋值16000
     used_optimizer = "pesg" if args.auc_maximization else args.optimizer
     loss_fn, optimizer = configure_optimizer(
         model, args.batch_size, head_only=True, optimizer=used_optimizer, auc_maximization=args.auc_maximization, num_classes=num_classes,
