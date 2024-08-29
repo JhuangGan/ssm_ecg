@@ -591,8 +591,9 @@ def evaluate(model, dataloader, idmap, lbl_itos, base_model='xresnet1d',
     torch.save(dic, join(os.path.dirname(save_model_at),info+'agg_preds_targs.pth'))
 
     # 增加sigmoid的
-    preds_sig = torch.sigmoid(torch.Tensor(preds)).numpy()
+    preds_sig = torch.sigmoid(torch.Tensor(preds_agg)).numpy()
     dic = {'preds': preds_sig, 'targs':targs_agg}
+
     torch.save(dic, join(os.path.dirname(save_model_at),info+'sig_agg_preds_targs.pth'))
 
     # scores_agg = scores
