@@ -130,67 +130,10 @@ if __name__ == '__main__':
 
     
     n_bootstraps = args.n_bootstraps
-    for i in tqdm(range(n_bootstraps)): 
-        print(len(val_preds))
-        print(len(val_targs))
-        print(len(test_preds))
-        print(len(test_targs))
 
-        val_preds_targs = [[val_targs[i],val_preds[i]] for i in range(len(val_preds))]
-        
-        val_preds_targs_sub = resample(val_preds_targs, replace=True, n_samples=int(1*len(val_preds_targs)), random_state=np.random.randint(1, 10000))
-        # print(np.array(val_preds_targs).shape)
-        val_targs_sub = [row[0] for row in val_preds_targs_sub]
-        val_preds_sub = [row[1] for row in val_preds_targs_sub]
-        # print(np.array(val_targs_sub).shape)
+    print(len(val_preds))
+    print(len(val_targs))
+    print(len(test_preds))
+    print(len(test_targs))
 
-        test_preds_targs = [[test_targs[i], test_preds[i]] for i in range(len(test_preds))]
-        
-        test_preds_targs_sub = resample(test_preds_targs, replace=True, n_samples=int(1*len(test_preds_targs)), random_state=np.random.randint(1, 10000))
-
-        test_targs_sub = [row[0] for row in test_preds_targs_sub]
-        test_preds_sub = [row[1] for row in test_preds_targs_sub]
-
-
-        val_macro_auc, val_f1_score, val_macro_aupr, \
-        test_macro_auc, test_f1, test_macro_aupr, \
-        val_sub_acc, val_macro_acc, test_sub_acc, test_macro_acc = all_metric_compute(np.array(val_targs_sub), np.array(val_preds_sub), np.array(test_targs_sub), np.array(test_preds_sub), macro_acc_flag=args.macro_acc)
-        
-        val_auc_list.append(val_macro_auc)
-        val_f1_list.append(val_f1_score)
-        val_aupr_list.append(val_macro_aupr)
-        val_macro_acc_list.append(val_macro_acc)
-        val_sub_acc_list.append(val_sub_acc)
-
-        test_auc_list.append(test_macro_auc)
-        test_f1_list.append(test_f1)
-        test_aupr_list.append(test_macro_aupr)
-        test_macro_acc_list.append(test_macro_acc)
-        test_sub_acc_list.append(test_sub_acc)
-
-    val_metric_list = [val_auc_list, val_f1_list, val_aupr_list, val_macro_acc_list, val_sub_acc_list]
-    test_metric_list = [test_auc_list, test_f1_list, test_aupr_list, test_macro_acc_list, test_sub_acc_list]
-
-    val_name = ['val_auc_list', 'val_f1_list', 'val_aupr_list', 'val_macro_acc_list', 'val_sub_acc_list']
-    test_name = ['test_auc_list', 'test_f1_list', 'test_aupr_list', 'test_macro_acc_list', 'test_sub_acc_list']
-
-    val_metric_info_list = []
-    for i in range(len(val_metric_list)):
-        
-        # if any(val_metric_list[i][0]) == -1:
-        #     pass
-        # else:
-        confidence_intervals = np.percentile(val_metric_list[i], [2.5, 97.5])
-        val_metric_info_list.append(val_name[i]+f":{np.array(val_metric_list[i]).mean()}, CI:{confidence_intervals}")
-    
-    test_metric_info_list = []
-    for i in range(len(test_metric_list)):
-        # if any(test_metric_list[i][0]) == -1:
-        #     pass
-        # else:
-        confidence_intervals = np.percentile(test_metric_list[i], [2.5, 97.5])
-        test_metric_info_list.append(test_name[i]+f":{np.array(test_metric_list[i]).mean()}, CI:{confidence_intervals}")
-    
-    print(val_metric_info_list)
-    print(test_metric_info_list)
-
+ 
