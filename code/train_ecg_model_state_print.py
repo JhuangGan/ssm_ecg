@@ -517,7 +517,7 @@ def cli_main():
     # configure trainer
     
     for name, param in pl_model.named_parameters():
-        print(name, param)
+        print(name, param.shape)
 
 
 if __name__ == "__main__":
