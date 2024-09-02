@@ -358,8 +358,8 @@ def transition(measure, N, **measure_args):
         A = -A
     # Legendre (scaled)
     elif measure == 'legs':
-        q = np.arange(N, dtype=np.float64)
-        col, row = np.meshgrid(q, q)
+        q = np.arange(N, dtype=np.float64)  ## q是(0-N)的数组
+        col, row = np.meshgrid(q, q)  ## col和row分别为二维数组
         r = 2 * q + 1
         M = -(np.where(row >= col, r, 0) - np.diag(q))
         T = np.sqrt(np.diag(2 * q + 1))
@@ -445,6 +445,7 @@ def nplr(measure, N, rank=1, dtype=torch.float):
     # Only keep one of the conjugate pairs
     w = w[..., 0::2].contiguous()
     V = V[..., 0::2].contiguous()
+    # 取非共轭的特征值和特征向量
 
     V_inv = V.conj().transpose(-1, -2)
 
@@ -1119,7 +1120,7 @@ class S4(nn.Module):
             k = F.pad(k0, (0, L)) \
                 + F.pad(k1.flip(-1), (L, 0)) \
         
-        # 快速傅里叶变换
+        # 通过快速傅里叶变换, 将时域信息转为频域信息计算y，然后转回时域信息，并只保留一半
         k_f = torch.fft.rfft(k, n=2*L)  # (C H L)
         u_f = torch.fft.rfft(u, n=2*L)  # (B H L)
         # k_f.unsqueeze(-4) * u_f.unsqueeze(-3) # (B C H L)

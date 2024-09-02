@@ -263,6 +263,7 @@ class ECGDataSetWrapper(object):
         train_folds = list(range(10))
 
         for fold in self.test_folds:
+            print(fold)
             train_folds.remove(fold)
         train_folds = np.array(train_folds)
 
