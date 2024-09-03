@@ -379,7 +379,7 @@ class TimeseriesDatasetCrops(torch.utils.data.Dataset):
 
             if(not(annotation and memmap_filename is not None)):#skip if memmap and annotation        
                 if(self.timeseries_df_label.dtype not in [np.int16, np.int32, np.int64, np.float32, np.float64]): #everything else cannot be batched anyway mp.Manager().list(self.timeseries_df_label)
-                    assert(annotation and memmap_filename is None and npy_data is None)#only for filenames in mode files
+                    # assert(annotation and memmap_filename is None and npy_data is None)#only for filenames in mode files 改成注释
                     self.timeseries_df_label = np.array(df[col_lbl].apply(lambda x:str(x))).astype(np.string_)
 
         self.c = num_classes
