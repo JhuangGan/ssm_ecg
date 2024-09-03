@@ -301,6 +301,10 @@ class ECGDataSetWrapper(object):
         self.df_train = df_train
         self.df_test = df_test
         
+        print(df_train[self.label])
+        print('#######')
+        print(df_test[self.label])
+
         ################## create datasets ########################
         train_ds = TimeseriesDatasetCrops(df_train, self.input_size, num_classes=self.num_classes, data_folder=target_folder, chunk_length=chunk_length_train if chunkify_train else 0,
                                           min_chunk_length=min_chunk_length, stride=stride_length_train, transforms=transforms, annotation=False, col_lbl=self.label)
