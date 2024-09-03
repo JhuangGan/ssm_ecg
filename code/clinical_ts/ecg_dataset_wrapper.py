@@ -267,8 +267,8 @@ class ECGDataSetWrapper(object):
             train_folds.remove(fold)
         train_folds = np.array(train_folds)
 
-        # # 这里尝试使用multihot encode
-        # print(lbl_itos)
+        # 这里尝试使用multihot encode
+        print(lbl_itos)
         # df['label'] = df[self.label].apply(
         #             lambda x: multihot_encode(x, len(self.lbl_itos)))
 
@@ -297,8 +297,8 @@ class ECGDataSetWrapper(object):
         
         df_test = filter_dataset(
             df_test, self.filter_label, combination=self.combination.split("_")[1] if "_" in self.combination else '')
-        # 以上其实是不做操作的，因为没有filter_label, 所以实际上是因为label没有经过multi encode的原因
-        
+        # 以上其实是不做操作的，因为没有filter_label, 所以实际上是因为label没有经过multi encode的原因, 放到前面分数据前面做
+
 
         self.df_train = df_train
         self.df_test = df_test
