@@ -555,6 +555,7 @@ class TimeseriesDatasetCrops(torch.utils.data.Dataset):
             ID = self.timeseries_df_data[df_idx]
 
             data = self.npy_data[ID][start_idx_crop:end_idx_crop]
+            print(data.shape)
 
             if(self.annotation):
                 label = self.npy_data_label[ID][start_idx_crop:end_idx_crop]
