@@ -377,10 +377,10 @@ class TimeseriesDatasetCrops(torch.utils.data.Dataset):
             else: # single integers/floats
                 self.timeseries_df_label = np.array(df[col_lbl])
 
-            if(not(annotation and memmap_filename is not None)):#skip if memmap and annotation        
-                if(self.timeseries_df_label.dtype not in [np.int16, np.int32, np.int64, np.float32, np.float64]): #everything else cannot be batched anyway mp.Manager().list(self.timeseries_df_label)
+            # if(not(annotation and memmap_filename is not None)):#skip if memmap and annotation        都注释
+            #     if(self.timeseries_df_label.dtype not in [np.int16, np.int32, np.int64, np.float32, np.float64]): #everything else cannot be batched anyway mp.Manager().list(self.timeseries_df_label)
                     # assert(annotation and memmap_filename is None and npy_data is None)#only for filenames in mode files 改成注释
-                    self.timeseries_df_label = np.array(df[col_lbl].apply(lambda x:str(x))).astype(np.string_)
+                    # self.timeseries_df_label = np.array(df[col_lbl].apply(lambda x:str(x))).astype(np.string_)  ## 这也注释
 
         self.c = num_classes
         if(cols_static is not None):
