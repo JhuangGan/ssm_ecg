@@ -309,9 +309,9 @@ class ECGDataSetWrapper(object):
 
         ################## create datasets ########################
         train_ds = TimeseriesDatasetCrops(df_train, self.input_size, num_classes=self.num_classes, data_folder=target_folder, chunk_length=chunk_length_train if chunkify_train else 0,
-                                          min_chunk_length=min_chunk_length, stride=stride_length_train, transforms=transforms, annotation=False, col_lbl=self.label)
+                                          min_chunk_length=min_chunk_length, stride=stride_length_train, transforms=transforms, annotation=False, col_lbl="label")  # 这里应该把col_lbl=self.label改为col_lbl="label"
         test_ds = TimeseriesDatasetCrops(df_test, self.input_size, num_classes=self.num_classes, data_folder=target_folder, chunk_length=chunk_length_valid if chunkify_valid else 0,
-                                         min_chunk_length=min_chunk_length, stride=stride_length_valid, transforms=transforms, annotation=False, col_lbl=self.label)
+                                         min_chunk_length=min_chunk_length, stride=stride_length_valid, transforms=transforms, annotation=False, col_lbl="label")  # 这里应该把col_lbl=self.label改为col_lbl="label"
 
         return train_ds, test_ds
 
