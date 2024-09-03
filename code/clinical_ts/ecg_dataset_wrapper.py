@@ -289,7 +289,7 @@ class ECGDataSetWrapper(object):
                     lambda x: x.argmax() == 1)]
 
             if label is not None:
-                print(label)  ## temp
+                # print(label)  ## temp
                 data_df = data_df[data_df['label_patho'].apply(
                     lambda x: x.argmax() == patho_label_to_numeric[label])]
 
