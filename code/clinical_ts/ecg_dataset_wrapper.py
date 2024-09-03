@@ -295,11 +295,11 @@ class ECGDataSetWrapper(object):
             return data_df
 
         
-        df_train = filter_dataset(
-            df_train, self.filter_label, combination=self.combination.split("_")[0])
+        # df_train = filter_dataset(
+        #     df_train, self.filter_label, combination=self.combination.split("_")[0])
         
-        df_test = filter_dataset(
-            df_test, self.filter_label, combination=self.combination.split("_")[1] if "_" in self.combination else '')
+        # df_test = filter_dataset(
+        #     df_test, self.filter_label, combination=self.combination.split("_")[1] if "_" in self.combination else '')
         # 以上其实是不做操作的，因为没有filter_label, 所以实际上是因为label没有经过multi encode的原因, 放到前面分数据前面做
 
 
