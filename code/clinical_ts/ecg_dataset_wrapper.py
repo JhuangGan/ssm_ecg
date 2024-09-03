@@ -269,7 +269,6 @@ class ECGDataSetWrapper(object):
 
         # 这里尝试使用multihot encode
         label = self.label
-        self.lbl_itos = np.array(lbl_itos)
         df['label'] = df[label].apply(
                     lambda x: multihot_encode(x, len(self.lbl_itos)))
 
