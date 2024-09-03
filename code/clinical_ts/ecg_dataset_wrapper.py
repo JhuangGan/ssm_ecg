@@ -271,8 +271,8 @@ class ECGDataSetWrapper(object):
         self.lbl_itos = np.array(self.lbl_itos)
         df['label'] = df[self.label + "_numeric"].apply(
                     lambda x: multihot_encode(x, len(self.lbl_itos)))
-        print(df['label'][:1])
-        print(len(df['label'][:1]))
+        print(type((df['label'][:1])))
+        print(len(df['label'][:1][0]))
         print(df['label'][:1].shape)
         print(df['label'].shape)
 
