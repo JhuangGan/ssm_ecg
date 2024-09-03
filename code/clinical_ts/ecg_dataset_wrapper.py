@@ -260,7 +260,8 @@ class ECGDataSetWrapper(object):
         self.num_classes = len(self.lbl_itos)
 
         train_folds = []
-        train_folds = list(range(10))
+        # train_folds = list(range(10))  ## 这里错了
+        train_folds = list(range(1, 11)) ## 应该改为1-11
 
         for fold in self.test_folds:
             print(fold)
