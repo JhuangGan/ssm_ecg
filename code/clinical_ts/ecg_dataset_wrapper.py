@@ -268,9 +268,9 @@ class ECGDataSetWrapper(object):
         train_folds = np.array(train_folds)
 
         # 这里尝试使用multihot encode
-        print(lbl_itos)
-        # df['label'] = df[self.label].apply(
-        #             lambda x: multihot_encode(x, len(self.lbl_itos)))
+        self.lbl_itos = np.array(self.lbl_itos)
+        df['label'] = df[self.label + "_numeric"].apply(
+                    lambda x: multihot_encode(x, len(self.lbl_itos)))
 
         df_train = df[(df.strat_fold.apply(lambda x: x in train_folds))]
         df_test = df[(df.strat_fold.apply(lambda x: x in self.test_folds))]
