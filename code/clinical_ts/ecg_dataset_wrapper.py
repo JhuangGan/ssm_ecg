@@ -297,15 +297,11 @@ class ECGDataSetWrapper(object):
         
         df_test = filter_dataset(
             df_test, self.filter_label, combination=self.combination.split("_")[1] if "_" in self.combination else '')
-        # 将以上注释
+        # 以上其实是不做操作的，因为没有filter_label, 所以实际上是因为label没有经过multi encode的原因
+        
 
         self.df_train = df_train
         self.df_test = df_test
-        
-        # temp
-        print(df_train[self.label])
-        print('#######')
-        print(df_test[self.label])
 
         ################## create datasets ########################
         train_ds = TimeseriesDatasetCrops(df_train, self.input_size, num_classes=self.num_classes, data_folder=target_folder, chunk_length=chunk_length_train if chunkify_train else 0,
