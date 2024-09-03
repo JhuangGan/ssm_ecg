@@ -271,8 +271,9 @@ class ECGDataSetWrapper(object):
         self.lbl_itos = np.array(self.lbl_itos)
         df['label'] = df[self.label + "_numeric"].apply(
                     lambda x: multihot_encode(x, len(self.lbl_itos)))
-        print(df['label'][:2])
-        print(df['label'][:2].shape)
+        print(df['label'][:1])
+        print(len(df['label'][:1]))
+        print(df['label'][:1].shape)
         print(df['label'].shape)
 
         df_train = df[(df.strat_fold.apply(lambda x: x in train_folds))]
