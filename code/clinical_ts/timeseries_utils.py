@@ -372,8 +372,8 @@ class TimeseriesDatasetCrops(torch.utils.data.Dataset):
             self.timeseries_df_label = np.zeros(len(df))
         else: # use actual labels
             if(isinstance(df[col_lbl].iloc[0],list) or isinstance(df[col_lbl].iloc[0],np.ndarray)):#stack arrays/lists for proper batching
-                self.timeseries_df_label = np.stack(df[col_lbl])   ## 如果改为array，不能改
-                # self.timeseries_df_label = np.array(df[col_lbl])
+                # self.timeseries_df_label = np.stack(df[col_lbl])   ## 如果改为array，不能改
+                self.timeseries_df_label = np.array(df[col_lbl])
             else: # single integers/floats
                 self.timeseries_df_label = np.array(df[col_lbl])
 
