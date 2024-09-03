@@ -267,6 +267,12 @@ class ECGDataSetWrapper(object):
             train_folds.remove(fold)
         train_folds = np.array(train_folds)
 
+        # 这里尝试使用multihot encode
+        label = self.label
+        self.lbl_itos = np.array(lbl_itos[label])
+        df['label'] = df[label].apply(
+                    lambda x: multihot_encode(x, len(self.lbl_itos)))
+
         df_train = df[(df.strat_fold.apply(lambda x: x in train_folds))]
         df_test = df[(df.strat_fold.apply(lambda x: x in self.test_folds))]
         patho_label_to_numeric = {"AVBlock":0, "LBBB": 1, "Normal":2, "RBBB":3}
