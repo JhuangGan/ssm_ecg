@@ -286,12 +286,13 @@ class ECGDataSetWrapper(object):
             return data_df
 
         
-        df_train = filter_dataset(
-            df_train, self.filter_label, combination=self.combination.split("_")[0])
+        # df_train = filter_dataset(
+        #     df_train, self.filter_label, combination=self.combination.split("_")[0])
         
-        df_test = filter_dataset(
-            df_test, self.filter_label, combination=self.combination.split("_")[1] if "_" in self.combination else '')
-        
+        # df_test = filter_dataset(
+        #     df_test, self.filter_label, combination=self.combination.split("_")[1] if "_" in self.combination else '')
+        # 将以上注释
+
         self.df_train = df_train
         self.df_test = df_test
         
