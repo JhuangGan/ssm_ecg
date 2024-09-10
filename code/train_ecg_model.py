@@ -529,7 +529,8 @@ def cli_main():
         
         # devices=[2,3], 有bug，无法pickle s4, gpus=[2,3]也会这样
         # auto_select_gpus=True,
-        callbacks=[ModelCheckpoint(verbose=True, monitor='val/val_macro_agg', mode='max')]
+        callbacks=[ModelCheckpoint(verbose=True, monitor='val/val_macro_agg', mode='max', 
+                                   save_top_k=-1)]  ## 改为每个模型都保存
         # resume_from_checkpoint=None if args.checkpoint_path == "" else args.checkpoint_path
     )
 
