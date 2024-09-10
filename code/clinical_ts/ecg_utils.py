@@ -572,7 +572,8 @@ def prepare_data_ptb_xl(data_path, min_cnt=10, target_fs=100, channels=12, chann
             sigbufs, header = wfdb.rdsamp(str(filename))
             data = resample_data(sigbufs=sigbufs,channel_stoi=channel_stoi,channel_labels=header['sig_name'],fs=header['fs'],target_fs=target_fs,channels=channels)
             assert(target_fs<=header['fs'])
-            np.save(target_root_ptb_xl/(filename.stem+".npy"),data*rescaled)
+            np.save(target_root_ptb_xl/(filenam9e.stem+".npy"),data*rescaled)  ## 在这里修改 不再保存了，由于只用500HZ的，所以也不用另外保存
+            # 直接把上面的注释，然后在filenames这里，加上远程的文件的路径，
             filenames.append(Path(filename.stem+".npy"))
         df_ptb_xl["data"] = filenames
 

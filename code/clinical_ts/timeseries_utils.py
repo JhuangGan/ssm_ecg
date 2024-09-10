@@ -498,7 +498,7 @@ class TimeseriesDatasetCrops(torch.utils.data.Dataset):
                 lst.append(self._getitem(idx,start_idx_rel))
         return tuple(lst)
 
-    def _getitem(self, idx,start_idx_rel):
+    def _getitem(self, idx, start_idx_rel):
         #low-level function that actually fetches the data
         df_idx = self.df_idx_mapping[idx]
         start_idx = self.start_idx_mapping[idx]
@@ -554,7 +554,7 @@ class TimeseriesDatasetCrops(torch.utils.data.Dataset):
             else:
                 label = self.timeseries_df_label[df_idx]
         else:#single npy array
-            ID = self.timeseries_df_data[df_idx]
+            ID = self.timeseries_df_data[df_idx]  ## 这个就是npy文件的名字
 
             data = self.npy_data[ID][start_idx_crop:end_idx_crop]
             # print(data.shape)

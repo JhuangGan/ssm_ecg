@@ -451,7 +451,7 @@ def cli_main():
 
     def create_s4():
         return S4Model(d_input=12, d_output=datamodule.num_classes, l_max=datamodule.data_input_size, d_state=args.d_state,
-                       d_model=args.d_model, n_layers=args.n_layers, dropout=args.s4_dropout, bn=args.bn, bidirectional=True,
+                       d_model=args.d_model, n_layers=args.n_layers, dropout=args.s4_dropout, bn=args.bn, bidirectional=False,
                        use_meta_information_in_head=args.use_meta_information_in_head)
 
     def create_s4_causal():

@@ -62,9 +62,9 @@ def _broadcast_dims(*tensors):
     return tensors
 
 
-_c2r = torch.view_as_real
-_r2c = torch.view_as_complex
-def _conj(x): return torch.cat([x, x.conj()], dim=-1)
+_c2r = torch.view_as_real  ## 复数张量转为实数张量， 即将复数张量, 1+2j变为 1, 2保存
+_r2c = torch.view_as_complex  ## 实数张量转换为复数张量， 将1，2变为1+2j保存
+def _conj(x): return torch.cat([x, x.conj()], dim=-1)  ## 用于计算张量的复共轭
 
 
 if torch.__version__.startswith('1.10'):
@@ -389,7 +389,7 @@ def rank_correction(measure, N, rank=1, dtype=torch.float):
 
     if measure == 'legs':
         assert rank >= 1
-        P = torch.sqrt(.5+torch.arange(N, dtype=dtype)).unsqueeze(0)  # (1 N)
+        P = torch.sqrt(.5+torch.arange(N, dtype=dtype)).unsqueeze(0)  # (1 N)  [0,1,...,N]+0.5然后开根号
     elif measure == 'legt':
         assert rank >= 2
         P = torch.sqrt(1+2*torch.arange(N, dtype=dtype))  # (N)
@@ -423,6 +423,7 @@ def nplr(measure, N, rank=1, dtype=torch.float):
     (w - p q^*, B) is unitarily equivalent to the original HiPPO A, B by the matrix V
     i.e. A = V[w - p q^*]V^*, B = V B
     """
+    ### 酉等价
     assert dtype == torch.float or torch.cfloat
     if measure == 'random':
         dtype = torch.cfloat if dtype == torch.float else torch.cdouble
@@ -434,22 +435,45 @@ def nplr(measure, N, rank=1, dtype=torch.float):
         return w, P, B, V
 
     A, B = transition(measure, N)
-    A = torch.as_tensor(A, dtype=dtype)  # (N, N)
-    B = torch.as_tensor(B, dtype=dtype)[:, 0]  # (N,)
+    ## transition 具体的做法如下：
+        # q = np.arange(N, dtype=np.float64)  ## q是(0到N-1)的数组，这里N=d_state=8
+        # col, row = np.meshgrid(q, q)  ## col和row分别为二维数组
+        # r = 2 * q + 1
+        # M = -(np.where(row >= col, r, 0) - np.diag(q))
+        # T = np.sqrt(np.diag(2 * q + 1))
+        # A = T @ M @ np.linalg.inv(T)
+        # B = np.diag(T)[:, None]
+        # B = B.copy()  # Otherwise "UserWarning: given NumPY array is not writeable..." after torch.as_tensor(B)
+        # return A, B
+        # B 其实就是r的开根号
+        # M 其实就是全部都是r作为行向量组成的矩阵，然后取左下三角，然后对角线减去q
+        # T 其实就是r的开根号后，作为对角元素的矩阵
+        # A = T*M*T.inv()
 
-    P = rank_correction(measure, N, rank=rank, dtype=dtype)
-    AP = A + torch.sum(P.unsqueeze(-2)*P.unsqueeze(-1), dim=-3)
-    w, V = torch.linalg.eig(AP)  # (..., N) (..., N, N)
+    A = torch.as_tensor(A, dtype=dtype)  # (N, N)
+    B = torch.as_tensor(B, dtype=dtype)[:, 0]  # (N,)  转为一维，本身是N*1，现在变成N
+
+    P = rank_correction(measure, N, rank=rank, dtype=dtype)  # [0,1,...,N-1]+0.5然后开根号， 且在0插入维度，变成(1,N)
+    AP = A + torch.sum(P.unsqueeze(-2)*P.unsqueeze(-1), dim=-3)  ## P.unsqueeze(-2) 为1，1，N，P.unsqueeze(-1)为1，N，1
+    # sum的那部分是每行代表0-N，每列代表乘数0-N，所以ij为（i-1）*（j-1）
+    # sum的部分，1,1,N,和1,N,1相乘，在倒数第三维度，就是第一维度相乘，1,N和N,1相乘，会自动广播，也就变成了上面那部分
+
+    # 这一部分就是NPLR名字的由来 Normal Plus Low Rank, 正规矩阵加低秩
+
+    w, V = torch.linalg.eig(AP)  # (..., N) (..., N, N)  取特征值和特征向量组成的矩阵
     # V w V^{-1} = A
 
     # Only keep one of the conjugate pairs
-    w = w[..., 0::2].contiguous()
-    V = V[..., 0::2].contiguous()
+    w = w[..., 0::2].contiguous()  ## w 是一个包含特征值的张量，其中可能包含复数元素
+    V = V[..., 0::2].contiguous()  
+    ## w[..., 0::2] 是一个切片操作，它从最后一个维度开始，每隔一个元素取一个元素。
+    # 这样做的目的是跳过复数共轭对中的第二个元素（即共轭元素），只保留第一个元素
+    # contiguous() 是一个PyTorch操作，它确保张量在内存中是连续存储的，
     # 取非共轭的特征值和特征向量
 
-    V_inv = V.conj().transpose(-1, -2)
+    V_inv = V.conj().transpose(-1, -2)  ## 取共轭交换位置，即逆矩阵
 
-    B = contract('ij, j -> i', V_inv, B.to(V))  # V^* B
+    B = contract('ij, j -> i', V_inv, B.to(V))  # V^* B  B.to(V)是将B的数据类型和设备转为和V相同
     P = contract('ij, ...j -> ...i', V_inv, P.to(V))  # V^* P
 
     return w, P, B, V
@@ -494,40 +518,47 @@ class SSKernelNPLR(nn.Module):
 
     """
 
-    @torch.no_grad()
+    @torch.no_grad()   ## 装饰器，不用计算梯度
     def _setup_C(self, double_length=False):
         """ Construct C~ from C
-
         double_length: current C is for length L, convert it to length 2L
         """
-        C = _r2c(self.C)
-        self._setup_state()
+        # 更新C的一种方法，
+        C = _r2c(self.C)  ## 获得C的实数转复数存储
+        self._setup_state()  ## 建立dA和dB 
         dA_L = power(self.L, self.dA)
         # Multiply C by I - dA_L
-        C_ = _conj(C)
+        # ------
+        C_ = _conj(C)  ## 得到共轭
         prod = contract("h m n, c h n -> c h m", dA_L.transpose(-1, -2), C_)
         if double_length:
             prod = -prod  # Multiply by I + dA_L instead
         C_ = C_ - prod
-        C_ = C_[..., :self.N]  # Take conjugate pairs again
+        # ------
+        # 上面虚线框起来的部分，其实就是计算C_ = (I - dA_L)C_, C_为C的共轭
+        C_ = C_[..., :self.N]  # Take conjugate pairs again 取一半
         self.C.copy_(_c2r(C_))
 
-        if double_length:
+        if double_length:  ## 初始化的时候，没有传入参数，默认是false
             self.L *= 2
             self._omega(self.L, dtype=C.dtype, device=C.device, cache=True)
 
     def _omega(self, L, dtype, device, cache=True):
         """ Calculate (and cache) FFT nodes and their "unprocessed" them with the bilinear transform
         This should be called everytime the internal length self.L changes """
+        # 计算和缓存快速傅里叶变换（FFT）节点以及与双线性变换相关的值
         omega = torch.tensor(
             np.exp(-2j * np.pi / (L)), dtype=dtype, device=device
         )  # \omega_{2L}
+        # 计算复数单位圆上的点，用于表示 FFT 的基本复数因子。np.exp(-2j * np.pi / (L)) 计算的是离散傅里叶变换（DFT）的基本单位根
+
         omega = omega ** torch.arange(0, L // 2 + 1, device=device)
+        # 得到[0,1,2,3,4]次方的omega并组成tensor
         z = 2 * (1 - omega) / (1 + omega)
         if cache:
             self.register_buffer("omega", _c2r(omega))
             self.register_buffer("z", _c2r(z))
-        return omega, z
+        return omega, z  ## 返回值，并没有用到，仅仅是上一步的，缓冲池里会注册omega和z，并设置为实部保存
 
     def __init__(
         self,
@@ -556,7 +587,7 @@ class SSKernelNPLR(nn.Module):
         tie_state: tie all state parameters across the H hidden features
         length_correction: multiply C by (I - dA^L) - can be turned off when L is large for slight speedup at initialization (only relevant when N large as well)
 
-        Note: tensor shape N here denotes half the true state size, because of conjugate symmetry
+        Note: tensor shape N here denotes half the true state size, because of conjugate symmetry 
         """
 
         super().__init__()
@@ -568,7 +599,7 @@ class SSKernelNPLR(nn.Module):
         self.rank = P.shape[-2]
         assert w.size(-1) == P.size(-1) == B.size(-1) == C.size(-1)
         self.H = log_dt.size(-1)
-        self.N = w.size(-1)
+        self.N = w.size(-1)  ## w已经去掉了共轭的部分，所以只有N//2大小
 
         # Broadcast everything to correct shapes
         C = C.expand(torch.broadcast_shapes(
@@ -580,13 +611,14 @@ class SSKernelNPLR(nn.Module):
 
         # Cache Fourier nodes every time we set up a desired length
         self.L = L
-        if self.L is not None:
+        if self.L is not None:  ## L不为空，将进入
             self._omega(self.L, dtype=C.dtype, device=C.device, cache=True)
+            # 用于计算和缓存快速傅里叶变换（FFT）节点以及与双线性变换相关的值
 
         # Register parameters
         # C is a regular parameter, not state
         # self.C = nn.Parameter(_c2r(C.conj().resolve_conj()))
-        self.C = nn.Parameter(_c2r(_resolve_conj(C)))
+        self.C = nn.Parameter(_c2r(_resolve_conj(C)))  ## 得到共轭，并转为实数存储，并设为参数参与训练
         train = False
         if trainable is None:
             trainable = {}
@@ -594,25 +626,31 @@ class SSKernelNPLR(nn.Module):
             trainable = {}
         if trainable == True:
             trainable, train = {}, True
+        # trainable 默认的为None, 
+
+        # 将log_dt, B（复数张量转为实数张量存储）, P（同B）设置为不可训练（按训练的代码，没有指定，所以默认为不训练）
+        # B 设为不可训练的，A应也是，因为是通过特征向量和特征值算出来的，没有设可训练的参数可
         self.register("log_dt", log_dt, trainable.get('dt', train), lr, 0.0)
         self.register("B", _c2r(B), trainable.get('B', train), lr, 0.0)
         self.register("P", _c2r(P), trainable.get('P', train), lr, 0.0)
-        if self.hurwitz:
-            # Some of the HiPPO methods have real part 0
-            log_w_real = torch.log(-w.real + 1e-3)
-            w_imag = w.imag
+        if self.hurwitz:  ## 这个是false
+            # Some of the HiPPO methods have real part 0，所以加上一点点以便于不至于为0
+            log_w_real = torch.log(-w.real + 1e-3)  ## 获得w的实部
+            w_imag = w.imag  ## 获得w的虚部
             self.register("log_w_real", log_w_real,
                           trainable.get('A', 0), lr, 0.0)
             self.register("w_imag", w_imag, trainable.get('A', train), lr, 0.0)
             self.Q = None
         else:
-            self.register("w", _c2r(w), trainable.get('A', train), lr, 0.0)
+            self.register("w", _c2r(w), trainable.get('A', train), lr, 0.0)  ## 复数张量转为实数张量，
+            # trainable.get('A', train), 先获取trainable字典中的A的值，若trainable字典中A这个key，则返回train
             # self.register("Q", _c2r(P.clone().conj().resolve_conj()), trainable.get('P', train), lr, 0.0)
-            Q = _resolve_conj(P.clone())
-            self.register("Q", _c2r(Q), trainable.get('P', train), lr, 0.0)
-
+            Q = _resolve_conj(P.clone())  ## 克隆P，并返回共轭
+            self.register("Q", _c2r(Q), trainable.get('P', train), lr, 0.0)  ## 将Q的复数张量转为实数张量存储并，保存且是否训练
+        # 貌似都是按实数存储，将复数视为实数张量进行存储
         if length_correction:
-            self._setup_C()
+            self._setup_C()  ## 长度修正，默认会进来，double_length=false
+            # C_ = (I - dA_L)C_，即根据L来更新C，其中C_为C的共轭，并得到最终的C_后并将其更新为新的C
 
     def _w(self):
         # Get the internal w (diagonal) parameter
@@ -639,32 +677,35 @@ class SSKernelNPLR(nn.Module):
             rate = self.L / L
         if L is None:
             L = int(self.L / rate)
+        # 都不进入
 
         # Increase the internal length if needed
-        while rate * L > self.L:
+        while rate * L > self.L:  ## 不进入，因为rate=1
             self.double_length()
 
-        dt = torch.exp(self.log_dt) * rate
+        dt = torch.exp(self.log_dt) * rate  ## dt = exp(log_dt)
         B = _r2c(self.B)
         C = _r2c(self.C)
         P = _r2c(self.P)
         Q = P.conj() if self.Q is None else _r2c(self.Q)
-        w = self._w()
+        w = self._w()  ## w=_r2c(self.w), 即转为实数存储
 
         if rate == 1.0:
             # Use cached FFT nodes
+            # 进入，计算FFT 的nodes
             omega, z = _r2c(self.omega), _r2c(self.z)  # (..., L)
         else:
             omega, z = self._omega(
                 int(self.L/rate), dtype=w.dtype, device=w.device, cache=False)
 
         if self.tie_state:
+            # false不进入
             B = repeat(B, '... 1 n -> ... h n', h=self.H)
             P = repeat(P, '... 1 n -> ... h n', h=self.H)
             Q = repeat(Q, '... 1 n -> ... h n', h=self.H)
 
         # Augment B
-        if state is not None:
+        if state is not None:  ## 可是就是None啊？不进入吗
             # Have to "unbilinear" the state to put it into the same "type" as B
             # Compute 1/dt * (I + dt/2 A) @ state
 
@@ -679,7 +720,7 @@ class SSKernelNPLR(nn.Module):
 
             B = torch.cat([s, B], dim=-3)  # (s+1, H, N)
 
-        # Incorporate dt into A
+        # Incorporate dt into A 将dt带入A
         w = w * dt.unsqueeze(-1)  # (H N)
 
         # Stack B and p, C and q for convenient batching
@@ -702,7 +743,7 @@ class SSKernelNPLR(nn.Module):
         if self.rank == 1:
             k_f = r[:-1, :-1, :, :] - r[:-1, -1:, :, :] * \
                 r[-1:, :-1, :, :] / (1 + r[-1:, -1:, :, :])
-        elif self.rank == 2:
+        elif self.rank == 2:  ## 不进入
             r00 = r[: -self.rank, : -self.rank, :, :]
             r01 = r[: -self.rank, -self.rank:, :, :]
             r10 = r[-self.rank:, : -self.rank, :, :]
@@ -730,17 +771,18 @@ class SSKernelNPLR(nn.Module):
                     "i j h n, j k h n, k l h n -> i l h n", r01, r11, r10)
 
         # Final correction for the bilinear transform
-        k_f = k_f * 2 / (1 + omega)
+        k_f = k_f * 2 / (1 + omega)  ## bilinear transform修正 算法1里的Woodbury Identity
 
         # Move from frequency to coefficients
         k = torch.fft.irfft(k_f)  # (S+1, C, H, L)
 
         # Truncate to target length
-        k = k[..., :L]
+        k = k[..., :L]   ### k 截断到目标长度 L 最长的1024个
 
         if state is not None:
             k_state = k[:-1, :, :, :]  # (S, C, H, L)
         else:
+            # state = None, 进入这里
             k_state = None
         k_B = k[-1, :, :, :]  # (C H L)
         return k_B, k_state
@@ -937,6 +979,7 @@ class SSKernelNPLR(nn.Module):
 
     def register(self, name, tensor, trainable=False, lr=None, wd=None):
         """Utility method: register a tensor as a buffer or trainable parameter"""
+        # 将变成设置为训练的参数或仅仅是存储在缓存池里
 
         if trainable:
             self.register_parameter(name, nn.Parameter(tensor))
@@ -978,31 +1021,34 @@ class HippoSSKernel(nn.Module):
         length_correction=True,
         hurwitz=False,
         tie_state=False,  # Tie parameters of HiPPO ODE across the H features
-        precision=1,  # 1 (single) or 2 (double) for the kernel
+        precision=1,  # 1 (single) or 2 (double) for the kernel  计算的精度
         resample=False,  # If given inputs of different lengths, adjust the sampling rate. Note that L should always be provided in this case, as it assumes that L is the true underlying length of the continuous signal
         verbose=False,
+        ## 只输入了(H=)self.h, N=self.n, L=l_max, channels=channels, verbose=verbose
     ):
         super().__init__()
         self.N = N
         self.H = H
         L = L or 1
-        self.precision = precision
+        self.precision = precision  ## 精度，1代表单精度32 float，2代表双精度64 double
         dtype = torch.double if self.precision == 2 else torch.float
-        cdtype = torch.cfloat if dtype == torch.float else torch.cdouble
-        self.rate = None if resample else 1.0
-        self.channels = channels
+        cdtype = torch.cfloat if dtype == torch.float else torch.cdouble  ## C的dtype
+        self.rate = None if resample else 1.0  ## 采样率 为1，因为resample没有指定，默认为false
+        self.channels = channels  ## 通道数，一般就是1，因为ecg就一个序列
 
-        # Generate dt
+        # Generate dt;  torch.rand(H) H形状的均匀分布0-1的随机数
+        # dt_min=0.001, dt_max=0.1
         log_dt = torch.rand(self.H, dtype=dtype) * (
             math.log(dt_max) - math.log(dt_min)
         ) + math.log(dt_min)
 
-        w, p, B, _ = nplr(measure, self.N, rank, dtype=dtype)  
-        C = torch.randn(channels, self.H, self.N // 2, dtype=cdtype)
+        # measure没有输入，默认"legs", rank=1
+        w, p, B, _ = nplr(measure, self.N, rank, dtype=dtype)  ## w, p, B,_ 由nplr获得
+        C = torch.randn(channels, self.H, self.N // 2, dtype=cdtype)  ## 标准正态分布里取数，形状为
         self.kernel = SSKernelNPLR(
             L, w, p, B, C,
             log_dt,
-            hurwitz=hurwitz,
+            hurwitz=hurwitz,  ## 默认false
             trainable=trainable,
             lr=lr,
             tie_state=tie_state,
@@ -1107,9 +1153,9 @@ class S4(nn.Module):
 
         Returns: same shape as u
         """
-        if not self.transposed:
+        if not self.transposed:   ## 假如没有转置的话
             u = u.transpose(-1, -2)  ## 将最后一个和倒数第二个维度的位置互换
-        L = u.size(-1)  ## 将最后一个维度大小，赋值为L
+        L = u.size(-1)  ## 最后一个维度大小即L的值
 
         # Compute SS Kernel
         k = self.kernel(L=L, rate=rate)  # (C H L) (B C H L)
@@ -1121,11 +1167,11 @@ class S4(nn.Module):
                 + F.pad(k1.flip(-1), (L, 0)) \
         
         # 通过快速傅里叶变换, 将时域信息转为频域信息计算y，然后转回时域信息，并只保留一半
-        k_f = torch.fft.rfft(k, n=2*L)  # (C H L)
-        u_f = torch.fft.rfft(u, n=2*L)  # (B H L)
+        k_f = torch.fft.rfft(k, n=2*L)  # (C H L)  感觉不对啊，这里应该是(C H L+1)
+        u_f = torch.fft.rfft(u, n=2*L)  # (B H L)  这里也应该是(C H L+1)
         # k_f.unsqueeze(-4) * u_f.unsqueeze(-3) # (B C H L)
-        y_f = contract('bhl,chl->bchl', u_f, k_f)
-        y = torch.fft.irfft(y_f, n=2*L)[..., :L]  # (B C H L)
+        y_f = contract('bhl,chl->bchl', u_f, k_f)   ## 这里也应该是(C H L+1)
+        y = torch.fft.irfft(y_f, n=2*L)[..., :L]  # (B C H L)  由这里也应该是(B C H 2L) 但只保留前L个(B C H L)
 
         # Compute D term in state space equation - essentially a skip connection
         # u.unsqueeze(-3) * self.D.unsqueeze(-1)
@@ -1137,7 +1183,7 @@ class S4(nn.Module):
             y = self.hyper_activation(yh) * y
 
         # Reshape to flatten channels
-        y = rearrange(y, '... c h l -> ... (c h) l')
+        y = rearrange(y, '... c h l -> ... (c h) l')  ## 展平为 B (C*H) L  但当没有bidirectional时，没差，有时则乘2
 
         y = self.dropout(self.activation(y))
 
