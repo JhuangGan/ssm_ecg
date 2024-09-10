@@ -1085,7 +1085,7 @@ class S4(nn.Module):
         hyper_act=None,  # Use a "hypernetwork" multiplication
         dropout=0.0,
         transposed=True,  # axis ordering (B, L, D) or (B, D, L)
-        verbose=False,
+        verbose=True,  ## 这里查看，所以改为True
         # SSM Kernel arguments
         **kernel_args,
     ):
