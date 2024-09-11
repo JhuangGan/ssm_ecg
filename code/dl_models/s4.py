@@ -1148,6 +1148,10 @@ class S4(nn.Module):
             weight_norm=weight_norm,
         )
 
+        for name, param in self.output_linear.named_parameters():
+            print(name, param.shape)
+
+
     def forward(self, u, rate=1.0, **kwargs):  # absorbs return_output and transformer src mask
         """
         u: (B H L) if self.transposed else (B L H)
