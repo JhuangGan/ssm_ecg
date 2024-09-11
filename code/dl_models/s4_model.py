@@ -151,7 +151,7 @@ class S4Model(nn.Module):
         x = x.transpose(-1, -2)
 
         # Pooling: average pooling over the sequence length
-        x = x.mean(dim=1)
+        x = x.mean(dim=1)  ## 对长度维度进行求均值, 
         meta_feats = self.meta_head(meta_feats)
         x = torch.cat([x, meta_feats], axis=1)
         

@@ -190,6 +190,7 @@ def LinearActivation(
 
     # Construct core module
     linear_cls = TransposedLinear if transposed else nn.Linear
+    # 转置的linear或linear层
     if activation == 'glu':
         d_output *= 2
     linear = linear_cls(d_input, d_output, bias=bias, **kwargs)
@@ -448,7 +449,7 @@ def nplr(measure, N, rank=1, dtype=torch.float):
         # B 其实就是r的开根号
         # M 其实就是全部都是r作为行向量组成的矩阵，然后取左下三角，然后对角线减去q
         # T 其实就是r的开根号后，作为对角元素的矩阵
-        # A = T*M*T.inv()
+        # A = T*M*T.inv(), A, B其实就是HiPPO 矩阵的值, 然后state=8
 
     A = torch.as_tensor(A, dtype=dtype)  # (N, N)
     B = torch.as_tensor(B, dtype=dtype)[:, 0]  # (N,)  转为一维，本身是N*1，现在变成N
@@ -1136,6 +1137,7 @@ class S4(nn.Module):
         self.dropout = dropout_fn(dropout) if dropout > 0.0 else nn.Identity()
 
         # position-wise output transform to mix features
+        print('h:{}, channels:{}'.format(self.h, self.channels))
         self.output_linear = LinearActivation(
             self.h*self.channels,
             self.h,
